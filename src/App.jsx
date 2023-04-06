@@ -1,16 +1,21 @@
-import { useState } from 'react'
+import React from 'react'
+import {
+	BrowserRouter as Router,
+	Routes, Route
+} from 'react-router-dom'
+import HomePage from './pages/HomePage'
+import FormPost from './pages/FormPost'
 
 function App() {
-  const [count, setCount] = useState(0)
-  
-  return (
-    <div className="App">
-      <h1>SourceLambda - Tienda Online Bv</h1>
-      <button onClick={() => setCount((count) => count + 1)}>
-        count is {count}
-      </button>
-    </div>
-  )
-}
-  
-export default App
+	
+	return (
+		<Router>
+			<Routes>
+				<Route path="/" element={<HomePage/>}></Route>
+				<Route path="/post/create" element={<FormPost/>}></Route>
+			</Routes>
+		</Router>
+		)
+	}
+	
+	export default App

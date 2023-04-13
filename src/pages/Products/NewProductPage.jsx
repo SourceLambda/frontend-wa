@@ -3,17 +3,6 @@ import { imageReference, uploadFile, deleteFile } from "../../assets/firebase"
 import { createPostMutation, getCategoriesQuery } from "../../util/postMSQueries"
 import GraphQLQuery from "../../util/graphQLQuery"
 
-// https://firebase.google.com/docs/storage/web/delete-files?hl=es
-
-/** deuda tecnica xd:
- * - arreglar respuesta de peticion POST /new-product ?
- * - arreglar manejo de peticion GET /categories ?
- * - agrupar categorias por parentezco
- * - verificar el llamado a categories
- * - validaciones
- * 
- */
-
 const DEFAULT_DESC = {
 	Description_text:"",
 	Brand:""
@@ -27,7 +16,7 @@ const DEFAULT_POST = {
 	Price: 0
 }
 
-function PostPage() {
+function NewProductPage() {
 	
 	const [post, setPost] = useState(DEFAULT_POST)
 	const [description, setDescription] = useState(DEFAULT_DESC)
@@ -51,14 +40,13 @@ function PostPage() {
 			const jsonRes = await response.json()
 
 			if (jsonRes.data === null || jsonRes.errors) {
-			 	return Promise.reject({msg: "Error response from ApiGateway", error: jsonRes.errors[0]});
+			 	return Promise.reject({msg: "Error response from ApiGateway", error: jsonRes?.errors[0]});
 			}
 			setCategories(jsonRes.data.allCategories)
 
         }
         getCategories()
             .catch((err) => {console.log(err)})
-
     }, [])
 
 	const handlePostValue = (e) => {
@@ -93,7 +81,9 @@ function PostPage() {
 			const postData = {
 				...post,
 				imageURL,
-				description
+				description,
+				techDetails,
+				otherDetails
 			}
 
 			const query = createPostMutation(postData)
@@ -211,4 +201,4 @@ function PostPage() {
 	)
 }
 
-export default PostPage
+export default NewProductPage

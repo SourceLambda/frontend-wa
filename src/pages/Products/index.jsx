@@ -1,15 +1,15 @@
-import NewProductPage from './NewProductPage';
+import ProductFormPage from './ProductFormPage';
 import ProductInfoPage from './ProductInfoPage';
 import ProductsPage from './ProductsPage';
 
 // https://firebase.google.com/docs/storage/web/delete-files?hl=es
 
 /** deuda tecnica xd:
- * - agrupar categorias por parentezco
- * - validaciones
- * - producto clickeable en /products
+ * - crud review
+ * - validaciones formPost y formReview
  * - *notificación de REQUEST SUCCESSFUL
+ * - *¿2 requests?
  * 
  */
 
-export { NewProductPage, ProductInfoPage, ProductsPage }
+export { ProductFormPage, ProductInfoPage, ProductsPage }

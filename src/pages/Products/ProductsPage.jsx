@@ -1,13 +1,18 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { getProductsQuery } from "../../util/postMSQueries";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import GraphQLQuery from "../../util/graphQLQuery";
+import { ProductContext } from "../../App";
 
 const ProductCard = ({ product }) => {
 
+    const { setSelectedProduct } = useContext(ProductContext)
+
     return (
         <div>
-            <h3>{product.Title}</h3>
+            <Link to={`/products/${product.ID}`} onClick={() => setSelectedProduct(product)}>
+                <h3>{product.Title}</h3>
+            </Link>
             <img src={product.Image} alt={product.Title + " Image"} width='200px'></img>
             <p><b>{product.Description.Brand}</b></p>
             <p>{product.Description.Description_text}</p>

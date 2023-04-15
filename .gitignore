@@ -25,4 +25,4 @@ dist-ssr
 
 # Project files/directories
 
-firebase.jsx
+.env

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
 
-const Header = () => {
+const Header = ({profile}) => {
 
     return (
         <header>
@@ -18,6 +18,11 @@ const Header = () => {
 				<li>
 					<Link to={"/new-product"}>
 						Nuevo Producto
+					</Link>
+				</li>
+				<li>
+					<Link to={"/profile"}>
+						{profile.firstname }
 					</Link>
 				</li>
 			</ul>

@@ -22,7 +22,7 @@ const Header = ({profile}) => {
 				</li>
 				<li>
 					<Link to={"/profile"}>
-						{profile.firstname }
+						{profile.firstname || "Iniciar Sesión"}
 					</Link>
 				</li>
 			</ul>

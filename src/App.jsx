@@ -41,15 +41,13 @@ function App() {
             .catch((err) => {console.log(err)})
     }, []) */
 
-	const [profile, setProfile] = useState(null);
+	const [profile, setProfile] = useState({});
 
     useEffect(() => {
         const query = getProfileById(88);
         const getProfile = async() => {
             const res = await GraphQLQuery(query);
             const jsonRes = await res.json();
-
-            console.log(jsonRes.data.profileById);
 
 			if (jsonRes.data === null || jsonRes.errors) {
 			 	return Promise.reject({msg: "Error response from ApiGateway", error: jsonRes?.errors[0]});

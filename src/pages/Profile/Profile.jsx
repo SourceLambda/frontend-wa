@@ -7,11 +7,11 @@ const Profile = ({profile}) => {
 
     return(
         <div>
-            <h1>{profile.firstname + profile.lastname}</h1>
+            <h1>{profile.firstname + " " + profile.lastname}</h1>
             <p>Información de tu perfil</p>
 
             <div>
-                <Link to={'/profile/edit'}>
+                <Link to={'/profile/profilepage'}>
                     <h3>Mis Datos</h3>
                 </Link>
                 <p>Datos validos</p>

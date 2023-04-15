@@ -1,7 +1,7 @@
 const ProfileForm = ({profile}) => {
     return(
         <div>
-            <h1>ProfileForm</h1>
+            <h2>Editar Datos Personales</h2>
         </div>
     );
 }

@@ -9,7 +9,7 @@ import { getCategoriesQuery } from './util/postMSQueries'
 import { getProfileById } from './util/profileMSQueries'
 import GraphQLQuery from './util/graphQLQuery'
 
-import { Profile, ProfileAddresses, ProfileCards, ProfileForm } from './pages/Profile';
+import { Profile, ProfileAddresses, ProfileCards, ProfilePage, ProfileForm} from './pages/Profile';
 
 const ProductContext = createContext(null)
 
@@ -73,7 +73,8 @@ function App() {
 					<Route path="/*" element={<div><h2>Error 404</h2><img src={errorImage} width='300px'></img><p>Not found :v</p></div>}></Route>
 
 					<Route path='/profile' element={<Profile profile={profile}/>}/>
-					<Route path='/profile/edit' element={<ProfileForm profile={profile}/>}/>
+					<Route path='/profile/profilepage' element={<ProfilePage profile={profile}/>}/>
+					<Route path='/profile/profilepage/edit' element={<ProfileForm profile={profile}/>}/>
 					<Route path='/profile/addresses' element={<ProfileAddresses profile={profile}/>}/>
 					<Route path='/profile/cards' element={<ProfileCards profile={profile}/>}/>
 				</Routes>

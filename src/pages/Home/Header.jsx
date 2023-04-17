@@ -1,27 +1,29 @@
-import { Link } from "react-router-dom"
+import { AppBar, CssBaseline, GlobalStyles, Toolbar, Typography, Link as StyleLink } from '@mui/material'
 
 const Header = () => {
 
     return (
-        <header>
-            <ul>
-				<li>
-					<Link to={"/"}>
-						Inicio
-					</Link>
-				</li>
-				<li>
-					<Link to={"/products"}>
-						Productos
-					</Link>
-				</li>
-				<li>
-					<Link to={"/new-product"}>
-						Nuevo Producto
-					</Link>
-				</li>
-			</ul>
-        </header>
+        <>
+			<GlobalStyles styles={{ ul: { margin: 0, padding: 0, listStyle: 'none' } }} />
+			<CssBaseline />
+			<AppBar position="relative">
+				<Toolbar sx={{flexGrap: 'wrap'}}>
+					
+					<Typography variant="h6" noWrap sx={{ flexGrow: 1 }}>SourceLambda</Typography>
+					<nav>
+						<StyleLink variant="button" href="/" sx={{ my: 1, mx: 1.5, color: 'white' }}>
+							Inicio
+						</StyleLink>
+						<StyleLink variant="button" href="/products" sx={{ my: 1, mx: 1.5, color: 'white' }}>
+							Productos
+						</StyleLink>
+						<StyleLink variant="button" href="/new-product" sx={{ my: 1, mx: 1.5, color: 'white' }}>
+							Nuevo Producto
+						</StyleLink>
+					</nav>
+				</Toolbar>
+			</AppBar>
+        </>
     )
 }
 

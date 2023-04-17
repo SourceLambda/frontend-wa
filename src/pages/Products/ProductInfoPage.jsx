@@ -1,43 +1,25 @@
 import { useContext, useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
-import { deleteProdMutation, getProductQuery } from "../../util/postMSQueries"
-import GraphQLQuery from "../../util/graphQLQuery"
 import { ProductContext } from "../../App"
+import { Review, ReviewForm } from "../../components"
+import Modal from '@mui/material/Modal';
+import GraphQLQuery from "../../util/graphQLQuery"
+import { deleteProdMutation, getProductQuery, getReviewsQuery } from "../../util/postMSQueries"
+import { Box, Button, Card, CardContent, CardMedia, Grid, Typography } from "@mui/material";
 
-const ProductInfo = ({ prod, deleteHandler, id }) => {
-
-    if (prod) {
-        return (
-            <div>
-                <h3>{prod.Title} - {id}</h3>
-                <img src={prod.Image} alt={prod.Title + " Image"} width='300px'></img>
-                <p><b>{prod.Description.Brand}</b></p>
-                <p>{prod.Description.Description_text}</p>
-                <ul>
-                    {prod.Description.Tech_details.map(detail => <li key={detail}>{detail}</li>)}
-                </ul>
-                <ul>
-                    {prod.Description.Other_details.map(detail => <li key={detail}>{detail}</li>)}
-                </ul>
-                <p>Unidades: {prod.Units}</p>
-                <p>Precio: {prod.Price}</p>
-                <p>Rating: {(prod.Sum_ratings / prod.Num_ratings) || prod.Num_ratings}</p>
-                <Link to={'/edit-product/'}>
-                    <button>Editar Producto</button>
-                </Link>
-                <button onClick={deleteHandler}>Eliminar Producto</button>
-            </div>
-        )
-    }
-    return (
-        <div>Cargando</div>
-    )
+const DEFAULT_REVIEW = {
+    User_name: "brian", // delete this field, USERNAME GET FROM BROWSER
+    User_email: "brian@unal.edu.co", // delete this field, USEREMAIL GET FROM BROWSER
+    Rating: 1,
+    Review_text: ""
 }
 
 const ProductInfoPage = () => {
 
     const { selectedProduct, setSelectedProduct } = useContext(ProductContext)
     const { id } = useParams('id')
+    const [reviews, setReviews] = useState([])
+    const [modalOpen, setModalOpen] = useState(false);
     
     const getProductRequest = async () => {
     
@@ -58,15 +40,36 @@ const ProductInfoPage = () => {
         }
     }
 
+    const getReviewsRequest = async () => {
+    
+        try {
+            const query = getReviewsQuery(null, id)
+            const response = await GraphQLQuery(query)
+
+            // apigateway have no response from ms
+            const jsonRes = await response.json()
+            if (jsonRes.data === null || jsonRes.errors) {
+                return Promise.reject({msg: "Error response from ApiGateway", error: jsonRes?.errors[0]});
+            }
+
+            return jsonRes.data.allReviews
+        }
+        catch (err) {
+            return err
+        }
+    }
+
     useEffect(() => {
         if (!selectedProduct) {
             getProductRequest().then(res => {
                 res.ID = id
                 setSelectedProduct(res)
-            })
+            }).catch((err) => console.log(err))
         }
+        getReviewsRequest().then(res => {
+            setReviews(res)
+        }).catch((err) => console.log(err))
     }, [])
-
 
     const deleteProductRequest = async () => {
 
@@ -89,8 +92,76 @@ const ProductInfoPage = () => {
         }
     }
 
+    if (selectedProduct) {
+        return (
+            <>
+                <Card sx={{ display: 'flex' }}>
+                    <CardContent sx={{ flex: 1 }}>
+                        <Typography component="h2" variant="h5">
+                            {selectedProduct.Title}
+                        </Typography>
+                        <Typography variant="subtitle1" color="text.secondary">
+                            {selectedProduct.Description.Brand}
+                        </Typography>
+                        <Typography variant="subtitle1" paragraph>
+                            {selectedProduct.Description.Description_text}
+                        </Typography>
+                        <Box>
+                            <Typography variant="subtitle1" paragraph>
+                                Detalles Técnicos:
+                            </Typography>
+                            {selectedProduct.Description.Tech_details.map(detail => <li key={detail}>{detail}</li>)}
+                        </Box>
+                        <Box>
+                            <Typography variant="subtitle1" paragraph>
+                                Otros Detalles:
+                            </Typography>
+                            {selectedProduct.Description.Other_details.map(detail => <li key={detail}>{detail}</li>)}
+                        </Box>
+                        <Typography variant="subtitle1">
+                            Unidades: {selectedProduct.Units}
+                        </Typography>
+                        <Typography variant="subtitle1">
+                            Precio: {selectedProduct.Price}
+                        </Typography>
+                        <Typography variant="subtitle1">
+                            Rating: {(selectedProduct.Sum_ratings / selectedProduct.Num_ratings) || selectedProduct.Num_ratings}
+                        </Typography>
+                        <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-around', flexDirection: 'row' }} >
+                            <Button variant="outlined">
+                                <Link to={"/edit-product"} style={{ textDecoration:'none', color:'blue' }}>Editar Producto</Link>
+                            </Button>
+                            <Button variant="outlined" color="error" onClick={deleteProductRequest}>Eliminar Producto</Button>
+                        </Box>
+                    </CardContent>
+                    <CardMedia
+                        component="img"
+                        sx={{ width: '350px', display: { xs: 'none', sm: 'block' } }}
+                        image={selectedProduct.Image}
+                        alt={selectedProduct.Title + " Image"}
+                    />
+                </Card>
+                <Box>
+                    <Button sx={{m: '20px'}} variant="contained" onClick={() => {setModalOpen(true)}}>Crear Reseña</Button>
+                </Box>
+
+                <Grid container spacing={4} >
+                    {reviews.map(review => {
+                        return <Grid item key={review.ID} xs={12} sm={6} md={4}>
+                            <Review review={review} postID={id} />
+                        </Grid>
+                    })}
+                </Grid>
+                <Modal
+                    open={modalOpen}
+                    onClose={() => {setModalOpen(false)}}
+                    children={<div><ReviewForm reviewData={DEFAULT_REVIEW} postID={id} dataType={'create'} /></div>}
+                ></Modal>
+            </>
+        )
+    }
     return (
-        <ProductInfo prod={selectedProduct} deleteHandler={deleteProductRequest} id={id} />
+        <div>Cargando</div>
     )
 }
 

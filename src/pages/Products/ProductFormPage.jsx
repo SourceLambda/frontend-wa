@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import ProductForm from '../../components/ProductForm';
+import { ProductForm } from "../../components"
 import { ProductContext } from '../../App';
 
 const DEFAULT_DESC = {
@@ -14,7 +14,6 @@ const DEFAULT_POST = {
 	Units: 0,
 	Price: 0
 }
-
 
 function ProductFormPage({ fetchedCategories, dataType }) {
 

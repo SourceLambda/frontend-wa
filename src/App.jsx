@@ -1,9 +1,7 @@
 import React, { createContext, useEffect, useState } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { ProductFormPage, ProductInfoPage, ProductsPage } from './pages/Products/index'
-import HomePage from './pages/Home/HomePage'
-import Header from './pages/Home/Header'
-import Footer from './pages/Home/Footer'
+import { HomePage, Header, Footer } from './pages/Home'
 import errorImage from './assets/luffy_eating.webp'
 import { getCategoriesQuery } from './util/postMSQueries'
 import GraphQLQuery from './util/graphQLQuery'
@@ -33,7 +31,9 @@ function App() {
 
         }
         getCategories()
-            .catch((err) => {console.log(err)})
+            .catch((err) => {
+				//console.log(err)
+			})
     }, [])
 	
 	return (

@@ -1,31 +1,15 @@
 import { useContext, useEffect, useState } from "react";
 import { getProductsQuery } from "../../util/postMSQueries";
-import { Link, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import GraphQLQuery from "../../util/graphQLQuery";
 import { ProductContext } from "../../App";
-
-const ProductCard = ({ product }) => {
-
-    const { setSelectedProduct } = useContext(ProductContext)
-
-    return (
-        <div>
-            <Link to={`/products/${product.ID}`} onClick={() => setSelectedProduct(product)}>
-                <h3>{product.Title}</h3>
-            </Link>
-            <img src={product.Image} alt={product.Title + " Image"} width='200px'></img>
-            <p><b>{product.Description.Brand}</b></p>
-            <p>{product.Description.Description_text}</p>
-            <p>Precio: {product.Price}</p>
-            <p>Rating: {(product.Sum_ratings / product.Num_ratings) || product.Num_ratings}</p>
-        </div>
-    )
-}
+import { Link, Card, CardContent, CardMedia, Container, Grid, Typography } from "@mui/material";
 
 const ProductsPage = () => {
-
+    
     const [products, setProducts] = useState([])
     const [searchParams] = useSearchParams()
+    const { setSelectedProduct } = useContext(ProductContext)
     
     useEffect(() => {
 
@@ -50,9 +34,33 @@ const ProductsPage = () => {
     }, [])
 
     return (
-        <div>
-            {products.map(prod => <ProductCard key={prod.ID} product={prod} />)}
-        </div>
+        <Container sx={{ py: 8 }} maxWidth='md' >
+            <Grid container spacing={4}>
+                {products.map((prod) => 
+                <Grid item key={prod.ID} xs={12} sm={6} md={4}>
+                    <Card sx={{ height: '100%', display: 'flex', justifyContent: 'space-between', flexDirection: 'column' }} >
+                        <CardMedia
+                            component='img'
+                            image={prod.Image}
+                            alt={prod.Title + " Image"}
+                            sx={{align: 'bottom'}}
+                        />
+                        <CardContent
+                            sx={{ height: 'min-content' }}
+                        >
+                            <Typography gutterBottom variant="h5" component="h2" >
+                                <Link href={`/products/${prod.ID}`} onClick={() => setSelectedProduct(prod)}>{prod.Title}</Link>
+                            </Typography>
+                            <Typography variant="h6">{prod.Description.Brand}</Typography>
+                            <Typography>Precio: ${prod.Price}</Typography>
+                            <Typography>Rating: {(prod.Sum_ratings / prod.Num_ratings) || prod.Num_ratings}</Typography>
+                            <Typography>{prod.Description.Description_text}</Typography>
+                        </CardContent>
+                    </Card>
+                </Grid>
+            )}
+            </Grid>
+        </Container>
     )
 }
 

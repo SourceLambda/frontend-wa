@@ -5,8 +5,8 @@ import ProductsPage from './ProductsPage';
 // https://firebase.google.com/docs/storage/web/delete-files?hl=es
 
 /** deuda tecnica xd:
- * - crud review
  * - validaciones formPost y formReview
+ * - coordinar front con los tipos de usuarios (roles)
  * - *notificación de REQUEST SUCCESSFUL
  * - *¿2 requests?
  * 

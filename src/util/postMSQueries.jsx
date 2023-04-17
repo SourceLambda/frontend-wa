@@ -133,8 +133,8 @@ export function reviewMutation (reviewID, reviewData, dataType) {
             PostID: ${reviewData.PostID}
             User_name: "${reviewData.User_name}"
             User_email: "${reviewData.User_email}"
-            Rating: "${reviewData.Rating}"
-            ${reviewID ? `OldRating: "${reviewData.OldRating}"` : ''}
+            Rating: ${reviewData.Rating}
+            ${reviewID ? `OldRating: ${reviewData.OldRating}` : ''}
             Review_text: "${reviewData.Review_text}"
         })
     }
@@ -145,7 +145,7 @@ export function reviewMutation (reviewID, reviewData, dataType) {
 export function deleteReviewMutation (reviewID, body) {
     const query = `
     mutation {
-        deletePost(ID: ${reviewID} body: {
+        deleteReview(ID: ${reviewID} body: {
             PostID: ${body.PostID}
             OldRating: ${body.OldRating}
         })

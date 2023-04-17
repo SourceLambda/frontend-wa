@@ -1,6 +1,6 @@
 import { AppBar, CssBaseline, GlobalStyles, Toolbar, Typography, Link as StyleLink } from '@mui/material'
 
-const Header = () => {
+const Header = ({profile}) => {
 
     return (
         <>
@@ -19,6 +19,9 @@ const Header = () => {
 						</StyleLink>
 						<StyleLink variant="button" href="/new-product" sx={{ my: 1, mx: 1.5, color: 'white' }}>
 							Nuevo Producto
+						</StyleLink>
+						<StyleLink variant="button" href="/profile" sx={{ my: 1, mx: 1.5, color: 'white' }}>
+							{profile.firstname || "Iniciar Sesión"}
 						</StyleLink>
 					</nav>
 				</Toolbar>

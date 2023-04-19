@@ -29,3 +29,23 @@ export function createPostMutation(postData) {
     `;
     return query
 }
+//el id del cliente se debe obtener del local storage
+export function getBillsQuery() {
+    return `
+    query {
+        historyByClientId(idCliente: ${localStorage.getItem("userId")}")}) {
+            idCliente
+            total
+            date
+            user
+            state
+            products{
+                name
+                description
+                price
+                quantity
+            }
+        }
+    }
+    `;
+}

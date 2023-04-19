@@ -20,6 +20,16 @@ const Header = () => {
 						Nuevo Producto
 					</Link>
 				</li>
+				<li>
+					<Link to={"/bill-history"}>
+						Historial de Compras
+					</Link>
+				</li>
+				<li>
+					<Link to={"/new-product"}>
+						Carrito de Compras
+					</Link>
+				</li>
 			</ul>
         </header>
     )

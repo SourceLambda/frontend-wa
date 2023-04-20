@@ -1,4 +1,5 @@
-import { AppBar, CssBaseline, GlobalStyles, Toolbar, Typography, Link as StyleLink } from '@mui/material'
+import { AppBar, CssBaseline, GlobalStyles, Toolbar, Typography, Link as StyleLink, Button } from '@mui/material'
+import { Link } from 'react-router-dom'
 
 const Header = ({profile}) => {
 
@@ -11,16 +12,16 @@ const Header = ({profile}) => {
 					
 					<Typography variant="h6" noWrap sx={{ flexGrow: 1 }}>SourceLambda</Typography>
 					<nav>
-						<StyleLink variant="button" href="/" sx={{ my: 1, mx: 1.5, color: 'white' }}>
+						<StyleLink component={Link} to='/' variant="button" sx={{ my: 1, mx: 1.5, color: 'white' }}>
 							Inicio
 						</StyleLink>
-						<StyleLink variant="button" href="/products" sx={{ my: 1, mx: 1.5, color: 'white' }}>
+						<StyleLink component={Link} to="/products" variant="button" sx={{ my: 1, mx: 1.5, color: 'white' }}>
 							Productos
 						</StyleLink>
-						<StyleLink variant="button" href="/new-product" sx={{ my: 1, mx: 1.5, color: 'white' }}>
+						<StyleLink component={Link} to="/new-product" variant="button" sx={{ my: 1, mx: 1.5, color: 'white' }}>
 							Nuevo Producto
 						</StyleLink>
-						<StyleLink variant="button" href="/profile" sx={{ my: 1, mx: 1.5, color: 'white' }}>
+						<StyleLink component={Link} to="/profile" variant="button" sx={{ my: 1, mx: 1.5, color: 'white' }}>
 							{profile.firstname || "Iniciar Sesión"}
 						</StyleLink>
 					</nav>

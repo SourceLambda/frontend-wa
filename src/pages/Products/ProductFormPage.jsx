@@ -1,6 +1,8 @@
-import React, { useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { ProductForm } from "../../components"
 import { ProductContext } from '../../App';
+import { getCategoriesQuery } from '../../util/postMSQueries'
+import GraphQLQuery from '../../util/graphQLQuery'
 
 const DEFAULT_DESC = {
 	Description_text:"",
@@ -15,9 +17,31 @@ const DEFAULT_POST = {
 	Price: 0
 }
 
-function ProductFormPage({ fetchedCategories, dataType }) {
+function ProductFormPage({ dataType }) {
 
 	const { selectedProduct } = useContext(ProductContext)
+	const [categories, setCategories] = useState([])
+
+	useEffect(() => {
+
+        const query = getCategoriesQuery();
+
+        async function getCategories () {
+    
+			const response = await GraphQLQuery(query)
+
+			// apigateway have no response from ms
+			const jsonRes = await response.json()
+
+			if (jsonRes.data === null || jsonRes.errors) {
+			 	return Promise.reject({msg: "Error response from ApiGateway", error: jsonRes?.errors[0]});
+			}
+			setCategories(jsonRes.data.allCategories)
+
+        }
+        getCategories()
+            .catch((err) => {console.log(err)})
+    }, [])
 
 	let postData;
 	if (dataType === 'create') {
@@ -55,7 +79,7 @@ function ProductFormPage({ fetchedCategories, dataType }) {
 	}
 	
 	return (
-		<ProductForm data={postData} fetchedCategories={fetchedCategories} />
+		<ProductForm data={postData} fetchedCategories={categories} />
 	)
 }
 

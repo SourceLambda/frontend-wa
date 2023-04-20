@@ -1,19 +1,26 @@
-import { useEffect, useState } from "react"
-import { Box, Button, CardMedia, Container, FormControl, Grid, InputLabel, List, ListItem, ListItemText, MenuItem, Paper, Select, TextField, Typography } from "@mui/material"
+import { useEffect, useRef, useState } from "react"
+import { Alert, Box, Button, CardMedia, Container, FormControl, Grid, InputLabel, List, ListItem, ListItemText, MenuItem, Paper, Select, Snackbar, TextField, Typography } from "@mui/material"
 import { imageReference, uploadFile, deleteFile, imageNameReference } from "../util/firebase"
 import GraphQLQuery from "../util/graphQLQuery"
 import { productMutation } from "../util/postMSQueries"
 import { createCategoryTree } from "../util/CategoryTreeClass"
+import { useNavigate } from "react-router-dom"
 
 function ProductForm({ data, fetchedCategories }) {
 	
-    // post/product data, can be default data or some data to edit 
-	const [post, setPost] = useState(data.post)
-	const [description, setDescription] = useState(data.description)
-	const [techDetail, setTechDetail] = useState("")
+    // post/product data, can be default data or some data to edit
+	const titleInput = useRef()
+	const descTextInput = useRef()
+	const brandInput = useRef()
+	const techDetailInput = useRef()
+	const otherDetailInput = useRef()
+	const unitsInput = useRef()
+	const priceInput = useRef()
+
 	const [techDetails, setTechDetails] = useState(data.techDetails)
-	const [otherDetail, setOtherDetail] = useState("")
 	const [otherDetails, setOtherDetails] = useState(data.otherDetails)
+	const [category, setCategory] = useState(data.post.CategoryID)
+	const [openSnackbar, setOpenSnackbar] = useState(false)
 
     // file and imageFirebaseRef are related to firebase storage and must be managed different
 	const [file, setFile] = useState(null)
@@ -24,6 +31,9 @@ function ProductForm({ data, fetchedCategories }) {
 	const [categoryString, setCategoryString] = useState("");
 	const [categoryTree, setCategoryTree] = useState(null)
 
+	// react router hook to page redirect
+	const navigate = useNavigate();
+
 	useEffect(() => {
 
         const catTree = createCategoryTree(fetchedCategories)
@@ -32,18 +42,6 @@ function ProductForm({ data, fetchedCategories }) {
         setCategories(catTree.getChildrenCategories(0))
 
     }, [fetchedCategories])
-
-	const handlePostValue = (e) => {
-		e.preventDefault()
-
-		setPost({...post, [e.target.name]: e.target.value})
-	}
-
-	const handleDescValue = (e) => {
-		e.preventDefault()
-
-		setDescription({...description, [e.target.name]: e.target.value})
-	}
 
 	const handleImageUpload = (e) => {
 		setFile(e.target.files[0])
@@ -56,7 +54,7 @@ function ProductForm({ data, fetchedCategories }) {
 		const selectedCatID = Number(e.target.value)
 		const selectedCategory = categories.find(category => category.ID === selectedCatID)
 		
-		setPost({...post, CategoryID: selectedCatID})
+		setCategory(selectedCatID)
 		setCategoryString(categoryString ? `${categoryString} > ${selectedCategory.Name}` : selectedCategory.Name)
 		setCategories(categoryTree.getChildrenCategories(selectedCatID))
 	}
@@ -74,9 +72,16 @@ function ProductForm({ data, fetchedCategories }) {
 			const imageURL = await uploadFile(file, imageFirebaseRef)
 
 			const postData = {
-				...post,
+				Title: titleInput.current.value,
+				CategoryID: category,
+				Creation_date: data.post.Creation_date,
+				Units: unitsInput.current.value,
+				Price: priceInput.current.value,
 				imageURL,
-				description,
+				description: {
+					Description_text: descTextInput.current.value,
+					Brand: brandInput.current.value
+				},
 				techDetails,
 				otherDetails
 			}
@@ -100,6 +105,8 @@ function ProductForm({ data, fetchedCategories }) {
 			if (jsonRes.data === null || jsonRes.errors) {
 			 	return Promise.reject({msg: "Error from ApiGateway", error: jsonRes.errors[0]});
 			}
+
+			setOpenSnackbar(true)
 			console.log(jsonRes.data)
 		}
 		catch (err) {
@@ -113,13 +120,13 @@ function ProductForm({ data, fetchedCategories }) {
 	
 		if (type === "TECH") {
 
-			setTechDetails([...techDetails, techDetail])
-			setTechDetail("")
+			setTechDetails([...techDetails, techDetailInput.current.value])
+			techDetailInput.current.value = '';
 		}
 		if (type === "OTHER") {
 
-			setOtherDetails(otherDetails.concat(otherDetail))
-			setOtherDetail("")
+			setOtherDetails(otherDetails.concat(otherDetailInput.current.value))
+			otherDetailInput.current.value = '';
 		}
 	}
 
@@ -142,12 +149,13 @@ function ProductForm({ data, fetchedCategories }) {
 							<TextField
 								required
 								id="titleProd"
-								value={post.Title}
+								// value={post.Title}
+								// onChange={handlePostValue}
+								inputRef={titleInput}
+								defaultValue={data.post.Title}
 								name="Title"
 								label="Título del Producto"
-								onChange={handlePostValue}
 								fullWidth
-								//autoComplete="given-name"
 								variant="standard"
 							/>
 						</Grid>
@@ -187,8 +195,8 @@ function ProductForm({ data, fetchedCategories }) {
 											required
 											id="Description_text"
 											name="Description_text"
-											value={description.Description_text}
-											onChange={handleDescValue}
+											inputRef={descTextInput}
+											defaultValue={data.description.Description_text}
 											label="Breve Descripción"
 											fullWidth
 											multiline
@@ -201,8 +209,8 @@ function ProductForm({ data, fetchedCategories }) {
 											required
 											id="Brand"
 											name="Brand"
-											value={description.Brand}
-											onChange={handleDescValue}
+											inputRef={brandInput}
+											defaultValue={data.description.Brand}
 											label="Marca"
 											variant="standard"
 										/>
@@ -233,8 +241,8 @@ function ProductForm({ data, fetchedCategories }) {
 													required
 													id="TechDetail"
 													name="TechDetail"
-													value={techDetail}
-													onChange={(e) => {setTechDetail(e.target.value)}}
+													inputRef={techDetailInput}
+													defaultValue={data.techDetails}
 													label="Nuevo"
 													variant="outlined"
 													sx={{width: '200px'}}
@@ -275,8 +283,8 @@ function ProductForm({ data, fetchedCategories }) {
 													required
 													id="OtherDetail"
 													name="OtherDetail"
-													value={otherDetail}
-													onChange={(e) => {setOtherDetail(e.target.value)}}
+													inputRef={otherDetailInput}
+													defaultValue={data.otherDetails}
 													label="Nuevo"
 													variant="outlined"
 													sx={{width: '200px'}}
@@ -300,8 +308,8 @@ function ProductForm({ data, fetchedCategories }) {
 								id="Units"
 								name="Units"
 								label="Unidades"
-								value={post.Units}
-								onChange={handlePostValue}
+								inputRef={unitsInput}
+								defaultValue={data.post.Units}
 								variant="outlined"
 								inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
 							/>
@@ -312,8 +320,8 @@ function ProductForm({ data, fetchedCategories }) {
 								id="Price"
 								name="Price"
 								label="Precio"
-								value={post.Price}
-								onChange={handlePostValue}
+								inputRef={priceInput}
+								defaultValue={data.post.Price}
 								variant="outlined"
 								inputProps={{ inputMode: 'numeric', pattern: '[0-9]*.[0-9]*' }}
 							/>
@@ -342,6 +350,11 @@ function ProductForm({ data, fetchedCategories }) {
 					</Grid>
 				</Paper>
 			</Container>
+			<Snackbar open={openSnackbar} autoHideDuration={3000} onClose={() => navigate('/products') }>
+				<Alert severity="success" variant='filled' sx={{ width: '100%' }}>
+					{data.dataType === 'create' ? 'Producto creado correctamente' : 'Producto actualizado correctamente'}
+				</Alert>
+			</Snackbar>
 		</>
 	)
 }

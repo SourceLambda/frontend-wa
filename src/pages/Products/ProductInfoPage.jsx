@@ -6,6 +6,7 @@ import Modal from '@mui/material/Modal';
 import GraphQLQuery from "../../util/graphQLQuery"
 import { deleteProdMutation, getProductQuery, getReviewsQuery } from "../../util/postMSQueries"
 import { Box, Button, Card, CardContent, CardMedia, Grid, Typography } from "@mui/material";
+import { deleteFile, imageNameReference } from "../../util/firebase";
 
 const DEFAULT_REVIEW = {
     User_name: "brian", // delete this field, USERNAME GET FROM BROWSER
@@ -79,6 +80,10 @@ const ProductInfoPage = () => {
         try {
             const query = deleteProdMutation(id)
             const response = await GraphQLQuery(query)
+
+            // deleting the product image from firebase storage
+            const imgRef = imageNameReference(selectedProduct.Image.match(/images%2F[\w-]+.(png|jpeg|webp)/)[0].replace("%2F", "/"))
+			deleteFile(imgRef)
 
             // apigateway have no response from ms
             const jsonRes = await response.json()

@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from "react";
 import { getProductsQuery } from "../../util/postMSQueries";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import GraphQLQuery from "../../util/graphQLQuery";
 import { ProductContext } from "../../App";
-import { Link, Card, CardContent, CardMedia, Container, Grid, Typography } from "@mui/material";
+import { Link as StyleLink, Card, CardContent, CardMedia, Container, Grid, Typography } from "@mui/material";
 
 const ProductsPage = () => {
     
@@ -49,7 +49,7 @@ const ProductsPage = () => {
                             sx={{ height: 'min-content' }}
                         >
                             <Typography gutterBottom variant="h5" component="h2" >
-                                <Link href={`/products/${prod.ID}`} onClick={() => setSelectedProduct(prod)}>{prod.Title}</Link>
+                                <StyleLink component={Link} to={`/products/${prod.ID}`} onClick={() => setSelectedProduct(prod)}>{prod.Title}</StyleLink>
                             </Typography>
                             <Typography variant="h6">{prod.Description.Brand}</Typography>
                             <Typography>Precio: ${prod.Price}</Typography>

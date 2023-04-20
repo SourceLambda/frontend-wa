@@ -1,23 +1,23 @@
-import { useState } from "react";
+import { useRef } from "react";
 import { reviewMutation } from "../util/postMSQueries";
 import GraphQLQuery from "../util/graphQLQuery";
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 
 const ReviewForm = ({ reviewData, postID, dataType }) => {
 
-    const [review, setReview] = useState(reviewData)
-
-    const handleValue = (e) => {
-        e.preventDefault()
-
-        setReview({...review, [e.target.name]: e.target.value})
-    }
+    const revTextInput = useRef(reviewData.Review_text)
+    const ratingInput = useRef(reviewData.Rating)
 
     const alterReview = async (e) => {
         e.preventDefault()
 
         try {
-            const data = {...review, PostID: postID}
+            const data = {
+                ...reviewData,
+                Review_text: revTextInput.current.value,
+                Rating: ratingInput.current.value,
+                PostID: postID
+            }
             const query = reviewMutation(dataType === 'update' && reviewData.ID, data, dataType)
 
             const response = await GraphQLQuery(query)
@@ -50,16 +50,16 @@ const ReviewForm = ({ reviewData, postID, dataType }) => {
     return (
         <Box sx={style} >
             <Typography id="modal-modal-title" variant="h5" component="h3">
-                Nueva Reseña
+                {dataType === 'create' ? "Nueva Reseña" : "Editar Reseña"}
             </Typography>
             <Grid container sx={{display: 'flex', justifyContent: 'space-between', flexDirection: 'column', mt: 1}} spacing={3} >
                 <Grid item >
                     <TextField
                         required
                         id="review-text"
-                        name="Review_text" 
-                        value={review.Review_text}
-                        onChange={handleValue}
+                        name="Review_text"
+                        inputRef={revTextInput}
+                        defaultValue={reviewData.Review_text}
                         label="Escríbenos tu opinión :D"
                         fullWidth
                         multiline
@@ -72,8 +72,8 @@ const ReviewForm = ({ reviewData, postID, dataType }) => {
                         required
                         id="review-rating"
                         name="Rating"
-                        value={review.Rating}
-                        onChange={handleValue}
+                        inputRef={ratingInput}
+                        defaultValue={reviewData.Rating}
                         label="Puntúanos de 1 a 5"
                         variant="outlined"
                         inputProps={{ inputMode: 'numeric', pattern: '[1-5]' }}

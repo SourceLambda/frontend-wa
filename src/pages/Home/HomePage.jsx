@@ -1,10 +1,11 @@
 import React from "react"
+import { Typography } from '@mui/material'
 
 function HomePage() {
 	
 	return (
 		<div>
-			<h1>SourceLambda - Tienda Online</h1>
+			<Typography variant="h1" align='center' sx={{my: 3}} fontSize={50}>SourceLambda - Tienda Online</Typography>
 		</div>
 	)
 }

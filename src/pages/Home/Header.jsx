@@ -24,6 +24,9 @@ const Header = ({profile}) => {
 						<StyleLink component={Link} to="/profile" variant="button" sx={{ my: 1, mx: 1.5, color: 'white' }}>
 							{profile.firstname || "Iniciar Sesión"}
 						</StyleLink>
+						<StyleLink component={Link} to="/bill-history" variant="button" sx={{ my: 1, mx: 1.5, color: 'white' }}>
+							Historial de Compras
+						</StyleLink>
 					</nav>
 				</Toolbar>
 			</AppBar>

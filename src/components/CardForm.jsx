@@ -87,6 +87,7 @@ const CardForm = ({idProfile}) => {
                         <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                             Tarjeta añadida éxitosamente en tu cuenta.
                         </Typography>
+                        <br />
                         <Link to={'/profile/cards'}>
                             <Button variant="contained" size="large">
                                 {'Ok'}

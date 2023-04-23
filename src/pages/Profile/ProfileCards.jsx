@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { getCardsByProfile } from "../../util/profileMSQueries";
 import { Link } from "react-router-dom";
 import GraphQLQuery from "../../util/graphQLQuery";
+import { Avatar, Card, CardHeader, Container, IconButton } from "@mui/material";
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const ProfileCards = ({profile}) => {
     const [cards, setCards] = useState([]);
@@ -17,12 +19,42 @@ const ProfileCards = ({profile}) => {
             }
             setCards(jsonRes.data.cardsByProfileId);
         }
-        getCards();
-        console.log(cards);
+        getCards(); 
     }, []);
 
     return(
-        <div>
+        <Container>
+            {cards.map(card => {
+                return(
+                    <>
+                    <br />
+                    <Card sx={{ maxWidth: 500 }}>
+                        <CardHeader
+                            avatar={
+                            <Avatar aria-label="recipe">
+                                MC
+                            </Avatar>
+                            }
+                            action={
+                            <IconButton aria-label="settings">
+                               <DeleteIcon />
+                            </IconButton>
+                            }
+                            title={card.cardNickname}
+                            subheader={card.cardNumber}
+                        />
+                    </Card>                        
+                    </>
+
+                );
+            })}
+            
+        </Container>
+    );
+}
+
+export default ProfileCards;
+{/*         <div>
             <h1>Tarjetas</h1>
             <Link>Añadir nueva tarjeta</Link>
             {cards.map(card => {
@@ -33,8 +65,4 @@ const ProfileCards = ({profile}) => {
                     </div>
                 );
             })}
-        </div>
-    );
-}
-
-export default ProfileCards;
+        </div> */}

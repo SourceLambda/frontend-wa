@@ -6,6 +6,8 @@ import errorImage from './assets/luffy_eating.webp'
 import { getProfileById } from './util/profileMSQueries'
 
 import { Profile, ProfileAddresses, ProfileCards, ProfilePage, ProfileForm} from './pages/Profile';
+import GraphQLQuery from './util/graphQLQuery'
+import { AddressForm } from './components'
 
 const ProductContext = createContext(null)
 
@@ -14,22 +16,22 @@ function App() {
 	const [selectedProduct, setSelectedProduct] = useState(null)
 	const [profile, setProfile] = useState({});
 
-    // useEffect(() => {
-    //     const query = getProfileById(88);
-    //     const getProfile = async() => {
-    //         const res = await GraphQLQuery(query);
-    //         const jsonRes = await res.json();
+    useEffect(() => {
+         const query = getProfileById(88);
+         const getProfile = async() => {
+             const res = await GraphQLQuery(query);
+             const jsonRes = await res.json();
 
-	// 		if (jsonRes.data === null || jsonRes.errors) {
-	// 		 	return Promise.reject({msg: "Error response from ApiGateway", error: jsonRes?.errors[0]});
-	// 		}
+	 		if (jsonRes.data === null || jsonRes.errors) {
+	 		 	return Promise.reject({msg: "Error response from ApiGateway", error: jsonRes?.errors[0]});
+	 		}
             
-    //         setProfile(jsonRes.data.profileById);
+             setProfile(jsonRes.data.profileById);
 
-    //     }
-    //     getProfile();
+         }
+         getProfile();
         
-    // }, []);
+     }, []);
 	
 	return (
 		<ProductContext.Provider value={{selectedProduct, setSelectedProduct}}>
@@ -47,6 +49,7 @@ function App() {
 					<Route path='/profile/profilepage' element={<ProfilePage profile={profile}/>}/>
 					<Route path='/profile/profilepage/edit' element={<ProfileForm profile={profile}/>}/>
 					<Route path='/profile/addresses' element={<ProfileAddresses profile={profile}/>}/>
+					<Route path='/profile/addresses/edit-address/:id' element={<AddressForm profile={profile} />}/>
 					<Route path='/profile/cards' element={<ProfileCards profile={profile}/>}/>
 				</Routes>
 				<Footer />

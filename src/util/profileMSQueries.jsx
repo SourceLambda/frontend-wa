@@ -83,6 +83,24 @@ export function deleteCard(id_profile, id_card){
     return query;
 }
 
+export function createCardToProfile(id_profile, card){
+    const query = `
+    mutation {
+      createCardToProfile(id_profile: ${id_profile}, card: {
+        cardName: "${card.cardName}", 
+        expirationDate: "${card.expirationDate}", 
+        cardNickname: "${card.cardNickname}", 
+        cvv: ${card.cvv}, 
+        cardNumber: ${card.cardNumber}
+      }){
+        cardNickname
+      }
+    }
+    `;
+    
+    return query;
+}
+
 
 export function updateAddress(id_address, addr){
 
@@ -91,8 +109,8 @@ export function updateAddress(id_address, addr){
     const query = `
     mutation {
         updateProfileAddress(id_address: ${id_address}, address: {
-          address: ${address},
-          detailAddress: ${detailAddress}
+          address: "${address}",
+          detailAddress: "${detailAddress}"
         }) {
           idAddress
           address

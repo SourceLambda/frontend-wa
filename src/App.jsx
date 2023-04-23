@@ -5,9 +5,9 @@ import { HomePage, Header, Footer } from './pages/Home'
 import errorImage from './assets/luffy_eating.webp'
 import { getProfileById } from './util/profileMSQueries'
 
-import { Profile, ProfileAddresses, ProfileCards, ProfilePage, ProfileForm} from './pages/Profile';
+import { Profile, ProfileAddresses, ProfileCards, ProfilePage, ProfileForm } from './pages/Profile';
 import GraphQLQuery from './util/graphQLQuery'
-import { AddressForm } from './components'
+import { AddressForm, CardForm } from './components'
 
 const ProductContext = createContext(null)
 
@@ -48,9 +48,13 @@ function App() {
 					<Route path='/profile' element={<Profile profile={profile}/>}/>
 					<Route path='/profile/profilepage' element={<ProfilePage profile={profile}/>}/>
 					<Route path='/profile/profilepage/edit' element={<ProfileForm profile={profile}/>}/>
+					
 					<Route path='/profile/addresses' element={<ProfileAddresses profile={profile}/>}/>
-					<Route path='/profile/addresses/edit-address/:id' element={<AddressForm profile={profile} />}/>
+					<Route path='/profile/addresses/new' />
+					<Route path='/profile/addresses/edit-address/:id' element={<AddressForm idProfile={profile.idProfile} />}/>
+
 					<Route path='/profile/cards' element={<ProfileCards profile={profile}/>}/>
+					<Route path='/profile/cards/new' element={<CardForm idProfile={profile.idProfile}/>}/>
 				</Routes>
 				<Footer />
 			</Router>

@@ -3,13 +3,13 @@ import { getAddressFromProfileAddresses } from "../util/profileMSQueries";
 import { useEffect, useState } from "react";
 import GraphQLQuery from "../util/graphQLQuery";
 
-const AddressForm = ({profile}) => {
+const AddressForm = ({idProfile}) => {
     const params = useParams();
     const [address, setAddresses] = useState([]);
     
     useEffect(() => {
         
-        const query = getAddressFromProfileAddresses(profile.idProfile, params.id);
+        const query = getAddressFromProfileAddresses(idProfile, params.id);
         const getAddress = async() => {
             const res = await GraphQLQuery(query);
             const jsonRes = await res.json();
@@ -20,13 +20,12 @@ const AddressForm = ({profile}) => {
             setAddresses(jsonRes.data.addressFromProfileAddresses);
         }
         getAddress();
-        console.log(address, profile);
     }, []);
 
     return(
         <div>
             <h1>{address.address}</h1>
-            <h1>{profile.firstname}</h1>
+            
         </div>
     );
 }

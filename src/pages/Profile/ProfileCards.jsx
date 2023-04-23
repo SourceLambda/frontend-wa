@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { getCardsByProfile } from "../../util/profileMSQueries";
 import { Link } from "react-router-dom";
 import GraphQLQuery from "../../util/graphQLQuery";
-import { Avatar, Card, CardHeader, Container, IconButton } from "@mui/material";
+import { Avatar, Button, Card, CardHeader, Container, IconButton, Typography } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 
 const ProfileCards = ({profile}) => {
@@ -24,11 +24,15 @@ const ProfileCards = ({profile}) => {
 
     return(
         <Container>
+            <br />
+            <Typography sx={{ fontSize: 20 }} color="text.secondary" gutterBottom>
+                {'Mis Tarjetas'}
+            </Typography>
             {cards.map(card => {
                 return(
                     <>
                     <br />
-                    <Card sx={{ maxWidth: 500 }}>
+                    <Card sx={{ maxWidth: 500 }} key={card.idCard}>
                         <CardHeader
                             avatar={
                             <Avatar aria-label="recipe">
@@ -48,6 +52,12 @@ const ProfileCards = ({profile}) => {
 
                 );
             })}
+            <br />
+            <Link to={'/profile/cards/new'}>
+                <Button variant="contained" size="large">
+                    Agregar Tarjeta
+                </Button>
+            </Link>
             
         </Container>
     );

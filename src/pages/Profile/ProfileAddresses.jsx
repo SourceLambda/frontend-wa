@@ -35,6 +35,7 @@ const ProfileAddresses = ({profile}) => {
     
     return(
         <Container>
+            <br />
             <Typography sx={{ fontSize: 20 }} color="text.secondary" gutterBottom>
                 {'Mis Direcciones'}
             </Typography>
@@ -42,7 +43,7 @@ const ProfileAddresses = ({profile}) => {
                 return( 
                     <>
                     <br />
-                    <Card sx={{ maxWidth: 500 }}>
+                    <Card sx={{ maxWidth: 500 }} key={addr.idAddress}>
                         <CardHeader
                             avatar={
                             <Avatar aria-label="recipe">
@@ -88,9 +89,12 @@ const ProfileAddresses = ({profile}) => {
                 );
             })}
             <br />
-            <Button variant="contained" size="large">
-                Agregar Dirección
-            </Button>
+            <Link to={'/profile/addresses/new'}>
+                <Button variant="contained" size="large">
+                    Agregar Dirección
+                </Button>                
+            </Link>
+
         </Container>
     );
 }

@@ -6,6 +6,7 @@ import errorImage from './assets/luffy_eating.webp'
 import { getProfileById } from './util/profileMSQueries'
 
 import { Profile, ProfileAddresses, ProfileCards, ProfilePage, ProfileForm} from './pages/Profile';
+import { BillHistory, CreateBill } from './pages/Bills';
 
 const ProductContext = createContext(null)
 
@@ -42,7 +43,8 @@ function App() {
 					<Route path="/new-product" element={<ProductFormPage dataType={'create'}/>}></Route>
 					<Route path="/edit-product" element={<ProductFormPage dataType={'update'}/>}></Route>
 					<Route path="/*" element={<div><h2>Error 404</h2><img src={errorImage} width='300px'></img><p>Not found :v</p></div>}></Route>
-
+					<Route path="/bill-history" element={<BillHistory/>}></Route>
+					<Route path="/bill-payment" element={<CreateBill/>}></Route>
 					<Route path='/profile' element={<Profile profile={profile}/>}/>
 					<Route path='/profile/profilepage' element={<ProfilePage profile={profile}/>}/>
 					<Route path='/profile/profilepage/edit' element={<ProfileForm profile={profile}/>}/>

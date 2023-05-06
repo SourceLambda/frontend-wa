@@ -55,6 +55,14 @@ export function getProductQuery(postID) {
     `
 }
 
+export function getCountProducts() {
+    return `
+    query {
+        countAllPost
+    }
+    `
+}
+
 export function productMutation(postID, postData, dataType) {
 
     const techDetsString = postData.techDetails.reduce((acc, ite) => acc+`"${ite}", `, "[")+"]"

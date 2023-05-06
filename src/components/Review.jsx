@@ -3,10 +3,18 @@ import { useState } from "react"
 import ReviewForm from "./ReviewForm"
 import { deleteReviewMutation } from "../util/postMSQueries"
 import GraphQLQuery from "../util/graphQLQuery"
+import SnackBarNotification from "./SnackBarNotification"
 
 const Review = ({ review, postID }) => {
 
     const [modalOpen, setModalOpen] = useState(false)
+    const [snackBarInfo, setSnackBarInfo] = useState({
+		message: "", 
+		barType: "info", 
+		state: false, 
+		time: 3000,
+		redirectHandler: () => {}
+	})
 
     const handleDeleteReview = async (e) => {
         e.preventDefault()
@@ -27,10 +35,25 @@ const Review = ({ review, postID }) => {
             if (jsonRes.data === null || jsonRes.errors) {
                 return Promise.reject({msg: "Error response from ApiGateway", error: jsonRes?.errors[0]});
             }
-            console.log(jsonRes.data)
-        }
-        catch (err) {
-            console.log(err)
+            setSnackBarInfo({
+				message: 'Reseña borrada correctamente', 
+				barType: 'success', 
+				state: true, 
+				time: 3000,
+				redirectHandler: () => window.location.reload()
+			})
+			//console.log(jsonRes.data)
+		}
+		catch (err) {
+			await deleteFile(imageFirebaseRef)
+			setSnackBarInfo({
+				message: 'Error al eliminar la reseña', 
+				barType: 'error', 
+				state: true, 
+				time: 3000,
+				redirectHandler: () => {}
+			})
+			//console.log(err)
         }
     }
     
@@ -58,6 +81,7 @@ const Review = ({ review, postID }) => {
                 onClose={() => {setModalOpen(false)}}
                 children={<div><ReviewForm reviewData={{...review, OldRating: review.Rating}} postID={postID} dataType={'update'} /></div>}
             ></Modal>
+            <SnackBarNotification sncBarData={snackBarInfo} />
         </Card>
     )
 }

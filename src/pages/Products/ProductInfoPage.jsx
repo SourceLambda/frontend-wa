@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react"
-import { Link, useParams } from "react-router-dom"
+import { Link, useNavigate, useParams } from "react-router-dom"
 import { ProductContext } from "../../App"
-import { Review, ReviewForm } from "../../components"
+import { Review, ReviewForm, SnackBarNotification } from "../../components"
 import Modal from '@mui/material/Modal';
 import GraphQLQuery from "../../util/graphQLQuery"
 import { deleteProdMutation, getProductQuery, getReviewsQuery } from "../../util/postMSQueries"
@@ -21,6 +21,15 @@ const ProductInfoPage = () => {
     const { id } = useParams('id')
     const [reviews, setReviews] = useState([])
     const [modalOpen, setModalOpen] = useState(false);
+    const [snackBarInfo, setSnackBarInfo] = useState({
+        message: '', 
+        barType: 'info', 
+        state: false, 
+        time: 3000,
+        redirectHandler: () => {}
+    })
+
+    const navigate = useNavigate()
     
     const getProductRequest = async () => {
     
@@ -90,10 +99,24 @@ const ProductInfoPage = () => {
             if (jsonRes.data === null || jsonRes.errors) {
                 return Promise.reject({msg: "Error response from ApiGateway", error: jsonRes?.errors[0]});
             }
-            console.log(jsonRes.data)
-        }
-        catch (err) {
-            console.log(err)
+            setSnackBarInfo({
+				message: 'Producto eliminado correctamente', 
+				barType: 'success', 
+				state: true, 
+				time: 3000,
+				redirectHandler: () => navigate(`/products`)
+			})
+			//console.log(jsonRes.data)
+		}
+		catch (err) {
+			await deleteFile(imageFirebaseRef)
+			setSnackBarInfo({
+				message: 'Error al eliminar producto', 
+				barType: 'error', 
+				state: true, 
+				time: 3000,
+				redirectHandler: () => {}
+			})
         }
     }
 
@@ -162,6 +185,7 @@ const ProductInfoPage = () => {
                     onClose={() => {setModalOpen(false)}}
                     children={<div><ReviewForm reviewData={DEFAULT_REVIEW} postID={id} dataType={'create'} /></div>}
                 ></Modal>
+                <SnackBarNotification sncBarData={snackBarInfo} />
             </>
         )
     }

@@ -70,10 +70,11 @@ const Review = ({ review, postID }) => {
                 <Typography>Puntuación: {"*".repeat(review.Rating)}</Typography>
                 <Typography paragraph >{review.Review_text}</Typography>
 
-                <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-around', flexDirection: 'row' }} >
+                {localStorage.getItem('user-role') === 'admin' ? 
+                (<Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-around', flexDirection: 'row' }} >
                     <Button variant="outlined" onClick={() => {setModalOpen(true)}}>Editar</Button>
                     <Button variant="outlined" color="error" onClick={handleDeleteReview}>Borrar</Button>
-                </Box>
+                </Box>) : null}
             </CardContent>
 
             <Modal

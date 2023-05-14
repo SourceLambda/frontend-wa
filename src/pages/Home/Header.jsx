@@ -1,37 +1,36 @@
-import { Link } from "react-router-dom"
+import { AppBar, CssBaseline, GlobalStyles, Toolbar, Typography, Link as StyleLink, Button } from '@mui/material'
+import { Link } from 'react-router-dom'
 
-const Header = () => {
+const Header = ({profile}) => {
 
     return (
-        <header>
-            <ul>
-				<li>
-					<Link to={"/"}>
-						Inicio
-					</Link>
-				</li>
-				<li>
-					<Link to={"/products"}>
-						Productos
-					</Link>
-				</li>
-				<li>
-					<Link to={"/new-product"}>
-						Nuevo Producto
-					</Link>
-				</li>
-				<li>
-					<Link to={"/bill-history"}>
-						Historial de Compras
-					</Link>
-				</li>
-				<li>
-					<Link to={"/new-product"}>
-						Carrito de Compras
-					</Link>
-				</li>
-			</ul>
-        </header>
+        <>
+			<GlobalStyles styles={{ ul: { margin: 0, padding: 0, listStyle: 'none' } }} />
+			<CssBaseline />
+			<AppBar position="relative">
+				<Toolbar sx={{flexGrap: 'wrap'}}>
+					
+					<Typography variant="h6" noWrap sx={{ flexGrow: 1 }}>SourceLambda</Typography>
+					<nav>
+						<StyleLink component={Link} to='/' variant="button" sx={{ my: 1, mx: 1.5, color: 'white' }}>
+							Inicio
+						</StyleLink>
+						<StyleLink component={Link} to="/products" variant="button" sx={{ my: 1, mx: 1.5, color: 'white' }}>
+							Productos
+						</StyleLink>
+						<StyleLink component={Link} to="/new-product" variant="button" sx={{ my: 1, mx: 1.5, color: 'white' }}>
+							Nuevo Producto
+						</StyleLink>
+						<StyleLink component={Link} to="/profile" variant="button" sx={{ my: 1, mx: 1.5, color: 'white' }}>
+							{profile.firstname || "Iniciar Sesión"}
+						</StyleLink>
+						<StyleLink component={Link} to="/bill-history" variant="button" sx={{ my: 1, mx: 1.5, color: 'white' }}>
+							Historial de Compras
+						</StyleLink>
+					</nav>
+				</Toolbar>
+			</AppBar>
+        </>
     )
 }
 

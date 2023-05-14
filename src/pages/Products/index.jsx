@@ -1,3 +1,5 @@
-import NewProductPage from './NewProductPage';
+import ProductFormPage from './ProductFormPage';
+import ProductInfoPage from './ProductInfoPage';
+import ProductsPage from './ProductsPage';
 
-export { NewProductPage }
+export { ProductFormPage, ProductInfoPage, ProductsPage }

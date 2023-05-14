@@ -31,7 +31,8 @@ const ProfileForm = ({profile}) => {
             email: email,
             password: password,
             birthday: birthday,
-            alternativeNumber: alternativeNumber
+            alternativeNumber: alternativeNumber,
+            role: profile.role
         }
         const query =  updateProfile(profile.idProfile, updatedProfile);
         const res = await GraphQLQuery(query);
@@ -59,8 +60,8 @@ const ProfileForm = ({profile}) => {
             > 
                 <TextField id="first_name" onChange={(e) => {setFirstname(e.target.value)}} label="Nombre" type="search" value={firstname}/>            
                 <TextField id="last_name"  onChange={(e) => {setLastname(e.target.value)}} label="Apellidos" type="search" value={lastname} />            
-                <TextField id="tel_number"  onChange={(e) => {setTelNumber(parseInt(e.target.value, 10))}} label="Número de Teléfono" type="search" value={telNumber} />            
-                <TextField id="other_number"  onChange={(e) => {setAlternativeNumber(parseInt(e.target.value, 10))}} label="Número de Teléfono Alternativo" type="search" value={alternativeNumber} />            
+                <TextField id="tel_number"  onChange={(e) => {setTelNumber(parseFloat(e.target.value, 10))}} label="Número de Teléfono" type="search" value={telNumber} />            
+                <TextField id="other_number"  onChange={(e) => {setAlternativeNumber(parseFloat(e.target.value, 10))}} label="Número de Teléfono Alternativo" type="search" value={alternativeNumber} />            
                 <TextField id="emaill"  onChange={(e) => {setEmail(e.target.value)}} label="Correo" type="search" value={email} />            
                 <TextField id="contraseña"  onChange={(e) => {setPassword(e.target.value)}} label="Contraseña" type="password" value={password} />
                 <TextField id="birth_day"  onChange={(e) => {setBirthday(e.target.value)}} label="Fecha de Nacimiento" type="date" value={birthday} />     

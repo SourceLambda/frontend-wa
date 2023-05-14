@@ -10,6 +10,7 @@ export function getProfileById(id_profile){
             password
             birthday
             alternativeNumber
+            role
         }
     }
     `;
@@ -143,7 +144,7 @@ export function updateAddress(id_address, addr){
 
 
 export function updateProfile(id_profile, profile){
-    const {idProfile, firstname, lastname, telNumber, email, password, birthday, alternativeNumber} = profile;
+    const {idProfile, firstname, lastname, telNumber, email, password, birthday, alternativeNumber, role} = profile;
 
     const query = `
     mutation {
@@ -155,7 +156,8 @@ export function updateProfile(id_profile, profile){
           email: "${email}",
           password: "${password}",
           birthday: "${birthday}",
-          alternativeNumber: ${alternativeNumber}
+          alternativeNumber: ${alternativeNumber},
+          role: "${role}"
         }){
           firstname
           lastname

@@ -18,9 +18,15 @@ const Header = ({profile}) => {
 						<StyleLink component={Link} to="/products" variant="button" sx={{ my: 1, mx: 1.5, color: 'white' }}>
 							Productos
 						</StyleLink>
-						<StyleLink component={Link} to="/new-product" variant="button" sx={{ my: 1, mx: 1.5, color: 'white' }}>
-							Nuevo Producto
-						</StyleLink>
+						{
+							profile.role != 'customer' ? 
+							<StyleLink component={Link} to="/new-product" variant="button" sx={{ my: 1, mx: 1.5, color: 'white' }}>
+								Nuevo Producto
+							</StyleLink>
+							:
+							''
+						}
+						
 						<StyleLink component={Link} to="/profile" variant="button" sx={{ my: 1, mx: 1.5, color: 'white' }}>
 							{profile.firstname || "Iniciar Sesión"}
 						</StyleLink>

@@ -33,7 +33,7 @@ export function createPostMutation(postData) {
 export function getBillsQuery() {
     return `
     query {
-        historyByClientId(idCliente: ${localStorage.getItem("userId")}")}) {
+        historyByClientId(idCliente: 101) {
             idCliente
             total
             date

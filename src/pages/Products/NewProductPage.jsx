@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { imageReference, uploadFile, deleteFile } from "../../assets/firebase"
+// import { imageReference, uploadFile, deleteFile } from "../../assets/firebase"
 import { createPostMutation, getCategoriesQuery } from "../../util/postMSQueries"
 import GraphQLQuery from "../../util/graphQLQuery"
 
@@ -75,7 +75,7 @@ function PostPage() {
 
 	const handleImageUpload = (e) => {
 		setFile(e.target.files[0])
-		setImageFirebaseRef(imageReference(e.target.files[0]))
+		//setImageFirebaseRef(imageReference(e.target.files[0]))
 	}
 
 	const createPost = async (e) => {
@@ -88,7 +88,8 @@ function PostPage() {
 
 		try {
 			
-			const imageURL = await uploadFile(file, imageFirebaseRef)
+			// const imageURL = await uploadFile(file, imageFirebaseRef)
+			const imageURL = "";
 
 			const postData = {
 				...post,
@@ -109,7 +110,8 @@ function PostPage() {
 			console.log(jsonRes.data)
 		}
 		catch (err) {
-			const dltRes = await deleteFile(imageFirebaseRef)
+			//const dltRes = await deleteFile(imageFirebaseRef)
+			const dltRes = "";
 			console.log(dltRes)
 			console.log(err)
 		}

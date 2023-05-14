@@ -3,38 +3,17 @@ import { getBillsQuery } from "../../util/postMSQueries";
 import GraphQLQuery from "../../util/graphQLQuery"
 
 const DEFAULT_BILLS =[ {
-    idCliente: "1",
-    total: 5,
-    date: "2022-040-21",
-    user: "Johan",
-    state: "Pending",
+    idCliente: "loading...",
+    total: 0,
+    date: "loading...",
+    user: "loading...",
+    state: "loading...",
     products: [
         {
-            name: "Pizza",
-            description: "Sara Valentina",
-            price: 2,
-            quantity: 2
-        }
-    ]
-},
-{
-    idCliente: "1",
-    total: 5,
-    date: "2022-040-21",
-    user: "Johan",
-    state: "Pending",
-    products: [
-        {
-            name: "Pizza",
-            description: "Sara Valentina",
-            price: 2,
-            quantity: 2
-        },
-        {
-            name: "Pizza",
-            description: "Sara Valentina",
-            price: 2,
-            quantity: 2
+            name: "loading...",
+            description: "loading...",
+            price: 0,
+            quantity: 0
         }
     ]
 }

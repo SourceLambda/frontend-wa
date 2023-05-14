@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react"
-import { Link, useParams } from "react-router-dom"
+import { Link, useNavigate, useParams } from "react-router-dom"
 import { ProductContext } from "../../App"
-import { Review, ReviewForm } from "../../components"
+import { Review, ReviewForm, SnackBarNotification } from "../../components"
 import Modal from '@mui/material/Modal';
 import GraphQLQuery from "../../util/graphQLQuery"
 import { deleteProdMutation, getProductQuery, getReviewsQuery } from "../../util/postMSQueries"
@@ -9,8 +9,8 @@ import { Box, Button, Card, CardContent, CardMedia, Grid, Typography } from "@mu
 import { deleteFile, imageNameReference } from "../../util/firebase";
 
 const DEFAULT_REVIEW = {
-    User_name: "brian", // delete this field, USERNAME GET FROM BROWSER
-    User_email: "brian@unal.edu.co", // delete this field, USEREMAIL GET FROM BROWSER
+    User_name: localStorage.getItem('user-email')?.split('@')[0], // cambiar cuando se tenga la info del perfil
+    User_email: localStorage.getItem('user-email'), 
     Rating: 1,
     Review_text: ""
 }
@@ -21,6 +21,15 @@ const ProductInfoPage = () => {
     const { id } = useParams('id')
     const [reviews, setReviews] = useState([])
     const [modalOpen, setModalOpen] = useState(false);
+    const [snackBarInfo, setSnackBarInfo] = useState({
+        message: '', 
+        barType: 'info', 
+        state: false, 
+        time: 3000,
+        redirectHandler: () => {}
+    })
+
+    const navigate = useNavigate()
     
     const getProductRequest = async () => {
     
@@ -90,10 +99,24 @@ const ProductInfoPage = () => {
             if (jsonRes.data === null || jsonRes.errors) {
                 return Promise.reject({msg: "Error response from ApiGateway", error: jsonRes?.errors[0]});
             }
-            console.log(jsonRes.data)
-        }
-        catch (err) {
-            console.log(err)
+            setSnackBarInfo({
+				message: 'Producto eliminado correctamente', 
+				barType: 'success', 
+				state: true, 
+				time: 3000,
+				redirectHandler: () => navigate(`/products`)
+			})
+			//console.log(jsonRes.data)
+		}
+		catch (err) {
+			await deleteFile(imageFirebaseRef)
+			setSnackBarInfo({
+				message: 'Error al eliminar producto', 
+				barType: 'error', 
+				state: true, 
+				time: 3000,
+				redirectHandler: () => {}
+			})
         }
     }
 
@@ -132,12 +155,13 @@ const ProductInfoPage = () => {
                         <Typography variant="subtitle1">
                             Rating: {(selectedProduct.Sum_ratings / selectedProduct.Num_ratings) || selectedProduct.Num_ratings}
                         </Typography>
-                        <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-around', flexDirection: 'row' }} >
+                        {localStorage.getItem('user-role') === 'admin' ? 
+                        (<Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-around', flexDirection: 'row' }} >
                             <Button variant="outlined">
                                 <Link to={"/edit-product"} style={{ textDecoration:'none', color:'blue' }}>Editar Producto</Link>
                             </Button>
                             <Button variant="outlined" color="error" onClick={deleteProductRequest}>Eliminar Producto</Button>
-                        </Box>
+                        </Box>) : null}
                     </CardContent>
                     <CardMedia
                         component="img"
@@ -146,11 +170,11 @@ const ProductInfoPage = () => {
                         alt={selectedProduct.Title + " Image"}
                     />
                 </Card>
-                <Box>
+                {localStorage.getItem('user-role') === 'client' ? (<Box>
                     <Button sx={{m: '20px'}} variant="contained" onClick={() => {setModalOpen(true)}}>Crear Reseña</Button>
-                </Box>
+                </Box>) : null}
 
-                <Grid container spacing={4} >
+                <Grid container spacing={4} sx={{ m: '10px'}} >
                     {reviews.map(review => {
                         return <Grid item key={review.ID} xs={12} sm={6} md={4}>
                             <Review review={review} postID={id} />
@@ -162,6 +186,7 @@ const ProductInfoPage = () => {
                     onClose={() => {setModalOpen(false)}}
                     children={<div><ReviewForm reviewData={DEFAULT_REVIEW} postID={id} dataType={'create'} /></div>}
                 ></Modal>
+                <SnackBarNotification sncBarData={snackBarInfo} />
             </>
         )
     }

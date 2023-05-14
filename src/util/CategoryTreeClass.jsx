@@ -85,6 +85,33 @@ export class CategoryTree {
 	getChildrenCategories(ParentID) {
 		return this.#getCategories(ParentID, this.#treeRoot).map(node => node.category)
 	}
+
+	/**
+	 * Return the category object of the category with the ID given.
+	 * @param {Integer} ID - category ID.
+	 * @param {CategoryNode} node - node to searching
+	 * @return {object} - category to return.
+	 */
+	#getCategory(ID, node) {
+		if (ID === node.category.ID) {
+			return node.category
+		}
+		if (node.children.length) {
+			let i = 0
+			let auxNode = node.children[i]
+			let category;
+			while (auxNode && !category) {
+				category = this.#getCategory(ID, auxNode)
+				i++
+				auxNode = node.children[i]
+			}
+			return category
+		}
+		return undefined
+	}
+	getCategoryByID(categoryID) {
+		return this.#getCategory(categoryID, this.#treeRoot)
+	}
 }
 
 

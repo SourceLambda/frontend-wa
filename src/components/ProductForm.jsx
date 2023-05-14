@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from "react"
-import { Alert, Box, Button, CardMedia, Container, FormControl, Grid, InputLabel, List, ListItem, ListItemText, MenuItem, Paper, Select, Snackbar, TextField, Typography } from "@mui/material"
+import { Box, Button, CardMedia, Container, FormControl, Grid, InputLabel, List, ListItem, ListItemText, MenuItem, Paper, Select, TextField, Typography } from "@mui/material"
 import { imageReference, uploadFile, deleteFile, imageNameReference } from "../util/firebase"
 import GraphQLQuery from "../util/graphQLQuery"
 import { productMutation } from "../util/postMSQueries"
 import { createCategoryTree } from "../util/CategoryTreeClass"
 import { useNavigate } from "react-router-dom"
+import SnackBarNotification from "./SnackBarNotification"
 
 function ProductForm({ data, fetchedCategories }) {
 	
@@ -20,7 +21,6 @@ function ProductForm({ data, fetchedCategories }) {
 	const [techDetails, setTechDetails] = useState(data.techDetails)
 	const [otherDetails, setOtherDetails] = useState(data.otherDetails)
 	const [category, setCategory] = useState(data.post.CategoryID)
-	const [openSnackbar, setOpenSnackbar] = useState(false)
 
     // file and imageFirebaseRef are related to firebase storage and must be managed different
 	const [file, setFile] = useState(null)
@@ -31,6 +31,27 @@ function ProductForm({ data, fetchedCategories }) {
 	const [categoryString, setCategoryString] = useState("");
 	const [categoryTree, setCategoryTree] = useState(null)
 
+	// snackbar default information
+	const [snackBarInfo, setSnackBarInfo] = useState({
+		message: "", 
+		barType: "info", 
+		state: false, 
+		time: 3000,
+		redirectHandler: () => {}
+	})
+
+	// validation object
+	const [invalid, setInvalid] = useState({
+        title: false,
+		categoryValid: false,
+		descText: false,
+		brand: false,
+		techDetail: false,
+		otherDetail: false,
+		units: false,
+		price: false
+    });
+
 	// react router hook to page redirect
 	const navigate = useNavigate();
 
@@ -40,6 +61,7 @@ function ProductForm({ data, fetchedCategories }) {
 
         setCategoryTree(catTree)
         setCategories(catTree.getChildrenCategories(0))
+		setCategoryString(catTree.getCategoryByID(data.post.CategoryID)?.Name || '')
 
     }, [fetchedCategories])
 
@@ -62,14 +84,55 @@ function ProductForm({ data, fetchedCategories }) {
 	const createPost = async (e) => {
 		e.preventDefault(e)
 
-		if (file == null) {
+		if (file === null && data.dataType === 'create') {
 			alert("Es necesario ingresar una imagen del producto.")
 			return
 		}
 
+		// form validation
+        const invalidTitle = !/^([\w ]{10,})$/.test(titleInput.current.value);
+		const invalidCategory = category < 1;
+        const invalidDescText = !/^([\w ]{10,})$/.test(descTextInput.current.value);
+		const invalidBrand = !/^([\w ]+)$/.test(brandInput.current.value);
+		const invalidTechDet = techDetails.some(detail => !/^([\w ]+)$/.test(detail));
+		const invalidOtherDet = otherDetails.some(detail => !/^([\w ]+)$/.test(detail));
+		const invalidUnits = unitsInput.current.value < 1;
+		const invalidPrice = priceInput.current.value <= 0;
+        setInvalid({
+            title: invalidTitle,
+			categoryValid: invalidCategory,
+			descText: invalidDescText,
+			brand: invalidBrand,
+			techDetail: invalidTechDet,
+			otherDetail: invalidOtherDet,
+			units: invalidUnits,
+			price: invalidPrice
+        })
+        if (
+		[
+			invalidTitle,
+			invalidCategory,
+			invalidDescText,
+			invalidBrand,
+			invalidTechDet,
+			invalidOtherDet,
+			invalidUnits,
+			invalidPrice
+		].includes(true)) {
+            return
+        }
+
 		try {
-			
-			const imageURL = await uploadFile(file, imageFirebaseRef)
+			// if there is an image loaded then must upload it
+			let imageURL = data.post.Image;
+			if (file !== null) {
+				imageURL = await uploadFile(file, imageFirebaseRef)
+			}
+			// also if the mutation case is 'update' must delete the old image
+			if (file !== null && data.dataType === 'update') {
+				const imgRef = imageNameReference(data.post.Image.match(/images%2F[\w-]+.(png|jpeg|webp)/)[0].replace("%2F", "/"))
+				deleteFile(imgRef)
+			}
 
 			const postData = {
 				Title: titleInput.current.value,
@@ -85,18 +148,7 @@ function ProductForm({ data, fetchedCategories }) {
 				techDetails,
 				otherDetails
 			}
-
-			let query;
-			if (data.dataType === 'create') {
-				query = productMutation(null, postData, 'create')
-			}
-			else {
-				// se puede cambiar ahora que SE TIENE EL IMG LINK
-				const imgRef = imageNameReference(data.post.Image.match(/images%2F[\w-]+.(png|jpeg|webp)/)[0].replace("%2F", "/"))
-				deleteFile(imgRef)
-				query = productMutation(data.post.ID, postData, 'update')
-			}
-
+			const query = productMutation(data.post.ID, postData, data.dataType)
 			const response = await GraphQLQuery(query)
 
 			// apigateway have no response from ms
@@ -106,12 +158,25 @@ function ProductForm({ data, fetchedCategories }) {
 			 	return Promise.reject({msg: "Error from ApiGateway", error: jsonRes.errors[0]});
 			}
 
-			setOpenSnackbar(true)
-			console.log(jsonRes.data)
+			setSnackBarInfo({
+				message: data.dataType === 'create' ? 'Producto creado exitosamente' : 'Producto actualizado exitosamente', 
+				barType: 'success', 
+				state: true, 
+				time: 3000,
+				redirectHandler: () => navigate('/products')
+			})
+			//console.log(jsonRes.data)
 		}
 		catch (err) {
-			/*const dltRes = */await deleteFile(imageFirebaseRef)
-			console.log(err)
+			await deleteFile(imageFirebaseRef)
+			setSnackBarInfo({
+				message: 'Error al crear/modificar el Producto', 
+				barType: 'error', 
+				state: true, 
+				time: 3000,
+				redirectHandler: () => {}
+			})
+			//console.log(err)
 		}
 	}
 
@@ -149,10 +214,10 @@ function ProductForm({ data, fetchedCategories }) {
 							<TextField
 								required
 								id="titleProd"
-								// value={post.Title}
-								// onChange={handlePostValue}
 								inputRef={titleInput}
 								defaultValue={data.post.Title}
+								error={invalid.title}
+                            	helperText={(invalid.title) && 'Ingresa un texto válido.'}
 								name="Title"
 								label="Título del Producto"
 								fullWidth
@@ -169,6 +234,7 @@ function ProductForm({ data, fetchedCategories }) {
 									onChange={handleSelectCategory}
 									value={''}
 									label="Categoría"
+									error={invalid.categoryValid}
 									sx={{ width: '200px' }}
 								>
 									{
@@ -197,6 +263,8 @@ function ProductForm({ data, fetchedCategories }) {
 											name="Description_text"
 											inputRef={descTextInput}
 											defaultValue={data.description.Description_text}
+											error={invalid.descText}
+                            				helperText={(invalid.descText) && 'Ingresa un texto válido.'}
 											label="Breve Descripción"
 											fullWidth
 											multiline
@@ -211,6 +279,8 @@ function ProductForm({ data, fetchedCategories }) {
 											name="Brand"
 											inputRef={brandInput}
 											defaultValue={data.description.Brand}
+											error={invalid.brand}
+                            				helperText={(invalid.brand) && 'Ingresa un texto válido.'}
 											label="Marca"
 											variant="standard"
 										/>
@@ -243,6 +313,8 @@ function ProductForm({ data, fetchedCategories }) {
 													name="TechDetail"
 													inputRef={techDetailInput}
 													defaultValue={data.techDetails}
+													error={invalid.techDetail}
+                            						helperText={(invalid.techDetail) && 'Ingresa un texto válido.'}
 													label="Nuevo"
 													variant="outlined"
 													sx={{width: '200px'}}
@@ -285,6 +357,8 @@ function ProductForm({ data, fetchedCategories }) {
 													name="OtherDetail"
 													inputRef={otherDetailInput}
 													defaultValue={data.otherDetails}
+													error={invalid.otherDetail}
+                            						helperText={(invalid.otherDetail) && 'Ingresa un texto válido.'}
 													label="Nuevo"
 													variant="outlined"
 													sx={{width: '200px'}}
@@ -308,10 +382,13 @@ function ProductForm({ data, fetchedCategories }) {
 								id="Units"
 								name="Units"
 								label="Unidades"
+								type='number'
 								inputRef={unitsInput}
 								defaultValue={data.post.Units}
+								error={invalid.units}
+                            	helperText={(invalid.units) && 'Ingresa una cantidad válida.'}
 								variant="outlined"
-								inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
+								inputProps={{ inputMode: 'numeric', step: 1, min: 1 }}
 							/>
 						</Grid>
 						<Grid item >
@@ -320,10 +397,13 @@ function ProductForm({ data, fetchedCategories }) {
 								id="Price"
 								name="Price"
 								label="Precio"
+								type='number'
 								inputRef={priceInput}
 								defaultValue={data.post.Price}
+								error={invalid.price}
+                            	helperText={(invalid.price) && 'Ingresa un precio válido.'}
 								variant="outlined"
-								inputProps={{ inputMode: 'numeric', pattern: '[0-9]*.[0-9]*' }}
+								inputProps={{ inputMode: 'numeric', step: 'any' }}
 							/>
 						</Grid>
 						<Grid item >
@@ -350,11 +430,7 @@ function ProductForm({ data, fetchedCategories }) {
 					</Grid>
 				</Paper>
 			</Container>
-			<Snackbar open={openSnackbar} autoHideDuration={3000} onClose={() => navigate('/products') }>
-				<Alert severity="success" variant='filled' sx={{ width: '100%' }}>
-					{data.dataType === 'create' ? 'Producto creado correctamente' : 'Producto actualizado correctamente'}
-				</Alert>
-			</Snackbar>
+			<SnackBarNotification sncBarData={snackBarInfo} />
 		</>
 	)
 }

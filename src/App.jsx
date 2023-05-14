@@ -17,7 +17,7 @@ function App() {
 	const [profile, setProfile] = useState({});
 
     useEffect(() => {
-         const query = getProfileById(88);
+         const query = getProfileById(775);
          const getProfile = async() => {
              const res = await GraphQLQuery(query);
              const jsonRes = await res.json();
@@ -50,7 +50,7 @@ function App() {
 					<Route path='/profile/profilepage/edit' element={<ProfileForm profile={profile}/>}/>
 					
 					<Route path='/profile/addresses' element={<ProfileAddresses profile={profile}/>}/>
-					<Route path='/profile/addresses/new' />
+					<Route path='/profile/addresses/new' element={<AddressForm idProfile={profile.idProfile} />} />
 					<Route path='/profile/addresses/edit-address/:id' element={<AddressForm idProfile={profile.idProfile} />}/>
 
 					<Route path='/profile/cards' element={<ProfileCards profile={profile}/>}/>

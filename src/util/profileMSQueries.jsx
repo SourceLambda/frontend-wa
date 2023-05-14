@@ -101,6 +101,24 @@ export function createCardToProfile(id_profile, card){
     return query;
 }
 
+export function createAddressToProfile(id_profile, addr){
+    const {address, detailAddress} = addr
+    const query = `
+    mutation {
+      createAddressToProfile(id_profile: ${id_profile}, address: {
+        address: "${address}",
+        detailAddress: "${detailAddress}"
+      }){
+        idAddress
+        address
+        detailAddress
+      }
+    }
+    `;
+    
+    return query;
+}
+
 
 export function updateAddress(id_address, addr){
 
@@ -125,18 +143,18 @@ export function updateAddress(id_address, addr){
 
 
 export function updateProfile(id_profile, profile){
-    const {firstname, lastname, telNumber, email, password, birthday, alternativeNumber} = profile;
+    const {idProfile, firstname, lastname, telNumber, email, password, birthday, alternativeNumber} = profile;
 
     const query = `
     mutation {
         updateProfile(id_profile: ${id_profile}, profile: {
-          idProfile: 1192,
-          firstname: ${firstname},
-          lastname: ${lastname},
+          idProfile: ${idProfile},
+          firstname: "${firstname}",
+          lastname: "${lastname}",
           telNumber: ${telNumber},
-          email: ${email},
-          password: ${password},
-          birthday: ${birthday},
+          email: "${email}",
+          password: "${password}",
+          birthday: "${birthday}",
           alternativeNumber: ${alternativeNumber}
         }){
           firstname

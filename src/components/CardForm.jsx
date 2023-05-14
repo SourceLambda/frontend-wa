@@ -16,6 +16,8 @@ const CardForm = ({idProfile}) => {
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
+    const [error, setError] = useState([]);
+
     const handleForm = async (event) => {
         event.preventDefault();
 
@@ -31,6 +33,7 @@ const CardForm = ({idProfile}) => {
         const jsonRes = await res.json();
 
         if (jsonRes.data === null || jsonRes.errors) {
+            setError(jsonRes.data);
             return Promise.reject({msg: "Error response from ApiGateway", error: jsonRes?.errors[0]});
         }
     }
@@ -82,10 +85,10 @@ const CardForm = ({idProfile}) => {
                         p: 4,
                     }}>
                         <Typography id="modal-modal-title" variant="h6" component="h2">
-                            Operación Exitosa
+                            {error != null ? 'Operación Exitosa': 'Ocurrió un error'}
                         </Typography>
                         <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                            Tarjeta añadida éxitosamente en tu cuenta.
+                            {error != null ? 'Tarjeta añadida éxitosamente en tu cuenta.': 'Verifique los datos enviados.'}
                         </Typography>
                         <br />
                         <Link to={'/profile/cards'}>

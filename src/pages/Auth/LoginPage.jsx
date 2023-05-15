@@ -3,11 +3,19 @@ import { loginUserQuery } from "../../util/authQueries";
 import GraphQLQuery from "../../util/graphQLQuery";
 import { SnackBarNotification } from "../../components";
 
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
+
+
+
 const LoginPage = () => {
 
     const [email, setEmail] = useState("");
     const [pass, setPass] = useState("");
 
+    //Was correct!
     const [snackBarInfo, setSnackBarInfo] = useState({
         message: '',
         barType: 'info',
@@ -52,14 +60,57 @@ const LoginPage = () => {
     }
     
     return (
+        
         <>
             <form>
+                <Box
+                sx={{
+                    marginTop: 8,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                }}
+                >
                 <h3>Iniciar Sesión</h3>
+               
+                <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+                   
+                </Avatar>
+
+                
                 <input id="email-input" onChange={(e)=>{setEmail(e.target.value)}} ></input>
                 <label htmlFor="email-input"></label>
+                
+                <TextField
+                margin="normal"
+                required
+                id="email"
+                label="Email Address"
+                name="email"
+                autoComplete="email"
+                autoFocus
+                />
+                <TextField
+                margin="normal"
+                required
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+                />
+                <Button
+                type="submit"
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+                >
+                Sign In
+                </Button>
+                
                 <input id="password-input" type="password" onChange={(e)=>{setPass(e.target.value)}} ></input>
                 <label htmlFor="password-input"></label>
                 <button onClick={loginHandler} >Ingresar</button>
+                </Box>
             </form>
             <SnackBarNotification sncBarData={snackBarInfo} />
         </>
@@ -67,3 +118,7 @@ const LoginPage = () => {
 }
 
 export default LoginPage;
+
+//no model
+// model check
+// 10 min max

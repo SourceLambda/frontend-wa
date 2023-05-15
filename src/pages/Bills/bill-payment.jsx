@@ -4,7 +4,7 @@ import { Accordion, AccordionDetails, AccordionSummary, Button, Card, CardConten
 import { createBill } from "../../util/PlaceOrderQueries";
 
 const DEFAULT_BILL = {
-    idCliente: 101,
+    idCliente: "903aa2d8-cb59-11ed-afa1-0242ac120002",
     date: "2022-04-21T12:00:00.000Z",
     user: "Johan",
     state: "Pending",

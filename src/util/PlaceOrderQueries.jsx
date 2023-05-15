@@ -1,10 +1,11 @@
 
 
 //el id del cliente se debe obtener del local storage
-export function getBillsQuery() {
+
+export function getBillsQuery(userId="903aa2d8-cb59-11ed-afa1-0242ac120002") {
     return `
     query {
-        historyByClientId(idCliente: 101){
+        historyByClientId(idCliente:"${userId}") {
             idCliente
             total
             date
@@ -12,7 +13,6 @@ export function getBillsQuery() {
             state
             products{
                 name
-                description
                 price
                 quantity
             }
@@ -20,10 +20,10 @@ export function getBillsQuery() {
     }
     `;
 }
-export function createBill(billTemplate) {
+export function createBill(userId="903aa2d8-cb59-11ed-afa1-0242ac120002") {
     return `
     mutation {
-        createBill(BillTemplate:${billTemplate}){
+        createBill(idCliente:${userId}){
             idCliente
             total
             date

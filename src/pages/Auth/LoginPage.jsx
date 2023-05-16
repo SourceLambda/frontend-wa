@@ -71,15 +71,15 @@ const LoginPage = () => {
                     alignItems: 'center',
                 }}
                 >
-                <h3>Iniciar Sesión</h3>
+                <h3>Sign In</h3>
                
                 <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
                    
                 </Avatar>
 
                 
-                <input id="email-input" onChange={(e)=>{setEmail(e.target.value)}} ></input>
-                <label htmlFor="email-input"></label>
+                {/* <input id="email-input" onChange={(e)=>{setEmail(e.target.value)}} ></input>
+                <label htmlFor="email-input"></label> */}
                 
                 <TextField
                 margin="normal"
@@ -107,9 +107,9 @@ const LoginPage = () => {
                 Sign In
                 </Button>
                 
-                <input id="password-input" type="password" onChange={(e)=>{setPass(e.target.value)}} ></input>
+                {/* <input id="password-input" type="password" onChange={(e)=>{setPass(e.target.value)}} ></input>
                 <label htmlFor="password-input"></label>
-                <button onClick={loginHandler} >Ingresar</button>
+                <button onClick={loginHandler} >Ingresar</button> */}
                 </Box>
             </form>
             <SnackBarNotification sncBarData={snackBarInfo} />

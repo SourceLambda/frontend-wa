@@ -30,11 +30,13 @@ const ShowCart = () => {
     }, [])
 
 const deleteItem = (id) => {
-    const query = removeItem(userId,id);
+    //el id debe ser { "itemId": "100"} donde 100 es el id del item
+
+    const query = removeItem(userId, id );
     console.log(query)
     const response = GraphQLQuery(query)
     const jsonRes = response.json()
-    if (jsonRes.data === null || jsonRes.errors) {
+    if (jsonRes.errors) {
         return Promise.reject({msg: "Error response from ApiGateway", error: jsonRes.errors[0]});
     }
     console.log(jsonRes.data)
@@ -56,10 +58,12 @@ const deleteItem = (id) => {
                         <Typography>Cantidad: {item.quantity} </Typography>
                     <Button variant="contained" onClick={     
                         async () => {
-                            deleteItem(item.id)
+                            console.log(item)
+                            console.log(cart.items)
+                            deleteItem(item.itemId)
                             //elimina el item de la vista
-                            setCart(cart?.items.filter((item) => item.id !== item.id))
-
+                            console.log(cart.items)
+                            setCart(cart.items.filter((i) => i.itemId !== item.itemId))
                         }
                     }>Eliminar</Button>
                     </CardContent>

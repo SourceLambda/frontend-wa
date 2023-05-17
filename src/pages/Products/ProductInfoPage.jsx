@@ -170,7 +170,7 @@ const ProductInfoPage = () => {
                         alt={selectedProduct.Title + " Image"}
                     />
                 </Card>
-                {localStorage.getItem('user-role') === 'client' ? (<Box>
+                {localStorage.getItem('user-role') === 'customer' ? (<Box>
                     <Button sx={{m: '20px'}} variant="contained" onClick={() => {setModalOpen(true)}}>Crear Reseña</Button>
                 </Box>) : null}
 

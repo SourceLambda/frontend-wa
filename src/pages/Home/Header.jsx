@@ -61,7 +61,7 @@ const Header = ({profile}) => {
 							Productos
 						</StyleLink>
 						{(localStorage.getItem('user-role') === 'admin' && adminView()) 
-							|| (localStorage.getItem('user-role') === 'client' && clientView()) 
+							|| (localStorage.getItem('user-role') === 'customer' && clientView()) 
 							|| (defaultUserView())}
 					</nav>
 				</Toolbar>

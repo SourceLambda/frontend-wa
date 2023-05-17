@@ -1,18 +1,16 @@
-import { Box, Button, Card, CardContent, Container, Modal, TextField, Typography } from "@mui/material";
+import { Box, Button, Container, Modal, Paper, TextField, Typography } from "@mui/material";
 import { useState } from "react";
+import { createCardToProfile } from "../util/profileMSQueries";
+import GraphQLQuery from "../util/graphQLQuery";
 import { Link } from "react-router-dom";
-import { updateProfile } from "../../util/profileMSQueries";
-import GraphQLQuery from "../../util/graphQLQuery";
 
-const ProfileForm = ({profile}) => {
+const CardForm = ({idProfile}) => {
 
-    const [firstname, setFirstname] = useState(profile.firstname);
-    const [lastname, setLastname] = useState(profile.lastname);
-    const [telNumber, setTelNumber] = useState(profile.telNumber);
-    const [email, setEmail] = useState(profile.email);
-    const [password, setPassword] = useState(profile.password);
-    const [birthday, setBirthday] = useState(profile.birthday);
-    const [alternativeNumber, setAlternativeNumber] = useState(profile.alternativeNumber);
+    const [cardNumber, setCardNumber] = useState(0);
+    const [expDate, setExpDate] = useState('');
+    const [CVV, setCVV] = useState(0);
+    const [cardName, setCardName] = useState('');
+    const [cardNickname, setCardNickName] = useState('');
 
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
@@ -23,18 +21,14 @@ const ProfileForm = ({profile}) => {
     const handleForm = async (event) => {
         event.preventDefault();
 
-        const updatedProfile = {
-            idProfile: profile.idProfile,
-            firstname: firstname,
-            lastname: lastname,
-            telNumber: telNumber,
-            email: email,
-            password: password,
-            birthday: birthday,
-            alternativeNumber: alternativeNumber,
-            role: profile.role
+        const createCard = {
+            cardName: cardName,
+            expirationDate: expDate,
+            cardNickname: cardNickname,
+            cvv: CVV,
+            cardNumber: cardNumber
         }
-        const query =  updateProfile(profile.idProfile, updatedProfile);
+        const query = createCardToProfile(idProfile, createCard);
         const res = await GraphQLQuery(query);
         const jsonRes = await res.json();
 
@@ -48,7 +42,7 @@ const ProfileForm = ({profile}) => {
         <Container>
             <br />
             <Typography sx={{ fontSize: 20 }} color="text.secondary" gutterBottom>
-                {'Editar Datos Personales'}
+                {'Nueva Tarjeta'}
             </Typography>
             <Box 
                 component="form"
@@ -58,13 +52,11 @@ const ProfileForm = ({profile}) => {
                 noValidate
                 autoComplete="off"
             > 
-                <TextField id="first_name" onChange={(e) => {setFirstname(e.target.value)}} label="Nombre" type="search" value={firstname}/>            
-                <TextField id="last_name"  onChange={(e) => {setLastname(e.target.value)}} label="Apellidos" type="search" value={lastname} />            
-                <TextField id="tel_number"  onChange={(e) => {setTelNumber(parseFloat(e.target.value, 10))}} label="Número de Teléfono" type="search" value={telNumber} />            
-                <TextField id="other_number"  onChange={(e) => {setAlternativeNumber(parseFloat(e.target.value, 10))}} label="Número de Teléfono Alternativo" type="search" value={alternativeNumber} />            
-                <TextField id="emaill"  onChange={(e) => {setEmail(e.target.value)}} label="Correo" type="search" value={email} />            
-                <TextField id="contraseña"  onChange={(e) => {setPassword(e.target.value)}} label="Contraseña" type="password" value={password} />
-                <TextField id="birth_day"  onChange={(e) => {setBirthday(e.target.value)}} label="Fecha de Nacimiento" type="date" value={birthday} />     
+                <TextField id="card_number" onChange={(e) => {setCardNumber(parseFloat(e.target.value))}} label="Número de la Tarjeta" type="search" />            
+                <TextField id="exp_date"  onChange={(e) => {setExpDate(e.target.value)}} label="Fecha de Expiración" type="date" />            
+                <TextField id="cvv"  onChange={(e) => {setCVV(parseInt(e.target.value, 10))}} label="CVV" type="search" />            
+                <TextField id="card_name"  onChange={(e) => {setCardName(e.target.value)}} label="Nombre en la Tarjeta" type="search" />            
+                <TextField id="card_nickname"  onChange={(e) => {setCardNickName(e.target.value)}} label="Apodo" type="search" />   
                 
                 <br />
                 <br />
@@ -96,11 +88,11 @@ const ProfileForm = ({profile}) => {
                             {error != null ? 'Operación Exitosa': 'Ocurrió un error'}
                         </Typography>
                         <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                            {error != null ? 'Datos personales actualizados': 'Verique la información proveída'}
+                            {error != null ? 'Tarjeta añadida éxitosamente en tu cuenta.': 'Verifique los datos enviados.'}
                         </Typography>
                         <br />
-                        <Link to={'/profile'}>
-                            <Button variant="contained" size="large" onClick={(e) => e.returnValue = true}>
+                        <Link to={'/profile/cards'}>
+                            <Button variant="contained" size="large">
                                 {'Ok'}
                             </Button>
                         </Link>
@@ -114,4 +106,11 @@ const ProfileForm = ({profile}) => {
     );
 }
 
-export default ProfileForm;
+export default CardForm;
+
+/**nombre en la tarjeta
+ * fecha de expiración
+ * apodo de la tarjeta
+ * cvv
+ * numero de la tarjeta
+ */

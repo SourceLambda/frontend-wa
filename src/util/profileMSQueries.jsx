@@ -10,6 +10,7 @@ export function getProfileById(id_profile){
             password
             birthday
             alternativeNumber
+            role
         }
     }
     `;
@@ -83,6 +84,42 @@ export function deleteCard(id_profile, id_card){
     return query;
 }
 
+export function createCardToProfile(id_profile, card){
+    const query = `
+    mutation {
+      createCardToProfile(id_profile: ${id_profile}, card: {
+        cardName: "${card.cardName}", 
+        expirationDate: "${card.expirationDate}", 
+        cardNickname: "${card.cardNickname}", 
+        cvv: ${card.cvv}, 
+        cardNumber: ${card.cardNumber}
+      }){
+        cardNickname
+      }
+    }
+    `;
+    
+    return query;
+}
+
+export function createAddressToProfile(id_profile, addr){
+    const {address, detailAddress} = addr
+    const query = `
+    mutation {
+      createAddressToProfile(id_profile: ${id_profile}, address: {
+        address: "${address}",
+        detailAddress: "${detailAddress}"
+      }){
+        idAddress
+        address
+        detailAddress
+      }
+    }
+    `;
+    
+    return query;
+}
+
 
 export function updateAddress(id_address, addr){
 
@@ -91,8 +128,8 @@ export function updateAddress(id_address, addr){
     const query = `
     mutation {
         updateProfileAddress(id_address: ${id_address}, address: {
-          address: ${address},
-          detailAddress: ${detailAddress}
+          address: "${address}",
+          detailAddress: "${detailAddress}"
         }) {
           idAddress
           address
@@ -107,19 +144,20 @@ export function updateAddress(id_address, addr){
 
 
 export function updateProfile(id_profile, profile){
-    const {firstname, lastname, telNumber, email, password, birthday, alternativeNumber} = profile;
+    const {idProfile, firstname, lastname, telNumber, email, password, birthday, alternativeNumber, role} = profile;
 
     const query = `
     mutation {
         updateProfile(id_profile: ${id_profile}, profile: {
-          idProfile: 1192,
-          firstname: ${firstname},
-          lastname: ${lastname},
+          idProfile: ${idProfile},
+          firstname: "${firstname}",
+          lastname: "${lastname}",
           telNumber: ${telNumber},
-          email: ${email},
-          password: ${password},
-          birthday: ${birthday},
-          alternativeNumber: ${alternativeNumber}
+          email: "${email}",
+          password: "${password}",
+          birthday: "${birthday}",
+          alternativeNumber: ${alternativeNumber},
+          role: "${role}"
         }){
           firstname
           lastname

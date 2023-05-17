@@ -1,14 +1,16 @@
 import React, { createContext, useEffect, useState } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import { ProductFormPage, ProductInfoPage, ProductsPage } from './pages/Products/index'
 import { HomePage, Header, Footer } from './pages/Home'
 import errorImage from './assets/image_error_404.jpg'
 import { getProfileById } from './util/profileMSQueries'
+import GraphQLQuery from './util/graphQLQuery'
 
-import { Profile, ProfileAddresses, ProfileCards, ProfilePage, ProfileForm} from './pages/Profile';
+import { ProductFormPage, ProductInfoPage, ProductsPage } from './pages/Products'
 import { BillHistory, CreateBill } from './pages/Bills';
 import { LoginPage, RegisterPage } from './pages/Auth'
 import ShowCart from './pages/Cart/shopping-cart'
+import { Profile, ProfileAddresses, ProfileCards, ProfilePage, ProfileForm } from './pages/Profile';
+import { AddressForm, CardForm } from './components'
 
 const ProductContext = createContext(null)
 
@@ -17,22 +19,22 @@ function App() {
 	const [selectedProduct, setSelectedProduct] = useState(null)
 	const [profile, setProfile] = useState({});
 
-    // useEffect(() => {
-    //     const query = getProfileById(88);
-    //     const getProfile = async() => {
-    //         const res = await GraphQLQuery(query);
-    //         const jsonRes = await res.json();
+    useEffect(() => {
+         const query = getProfileById(775);
+         const getProfile = async() => {
+             const res = await GraphQLQuery(query);
+             const jsonRes = await res.json();
 
-	// 		if (jsonRes.data === null || jsonRes.errors) {
-	// 		 	return Promise.reject({msg: "Error response from ApiGateway", error: jsonRes?.errors[0]});
-	// 		}
+	 		if (jsonRes.data === null || jsonRes.errors) {
+	 		 	return Promise.reject({msg: "Error response from ApiGateway", error: jsonRes?.errors[0]});
+	 		}
             
-    //         setProfile(jsonRes.data.profileById);
+             setProfile(jsonRes.data.profileById);
 
-    //     }
-    //     getProfile();
+         }
+         getProfile();
         
-    // }, []);
+     }, []);
 	
 	return (
 		<ProductContext.Provider value={{selectedProduct, setSelectedProduct}}>
@@ -56,7 +58,10 @@ function App() {
 					<Route path='/profile/profilepage' element={<ProfilePage profile={profile}/>}/>
 					<Route path='/profile/profilepage/edit' element={<ProfileForm profile={profile}/>}/>
 					<Route path='/profile/addresses' element={<ProfileAddresses profile={profile}/>}/>
+					<Route path='/profile/addresses/new' element={<AddressForm idProfile={profile.idProfile} />} />
+					<Route path='/profile/addresses/edit-address/:id' element={<AddressForm idProfile={profile.idProfile} />}/>
 					<Route path='/profile/cards' element={<ProfileCards profile={profile}/>}/>
+					<Route path='/profile/cards/new' element={<CardForm idProfile={profile.idProfile}/>}/>
 					
 					<Route path="/*" element={<div><h2>Error 404</h2><img src={errorImage} width='300px'></img><p>Not found</p></div>}></Route>
 				</Routes>

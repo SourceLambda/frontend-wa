@@ -170,9 +170,11 @@ const ProductInfoPage = () => {
                         alt={selectedProduct.Title + " Image"}
                     />
                 </Card>
-                {localStorage.getItem('user-role') === 'customer' ? (<Box>
-                    <Button sx={{m: '20px'}} variant="contained" onClick={() => {setModalOpen(true)}}>Crear Reseña</Button>
-                </Box>) : null}
+                {localStorage.getItem('user-role') === 'customer' ? 
+                    (<Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-around', flexDirection: 'row' }} >
+                        <Button sx={{m: '20px'}} variant="contained" onClick={() => {setModalOpen(true)}}>Crear Reseña</Button>
+                        <Button sx={{m: '20px'}} variant="contained" onClick={() => {console.log('añadido xd')}}>Añadir al Carrito</Button>
+                    </Box>) : null}
 
                 <Grid container spacing={4} sx={{ m: '10px'}} >
                     {reviews.map(review => {

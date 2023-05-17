@@ -3,8 +3,9 @@ import { getCategoriesQuery, getCountProducts, getProductsQuery } from "../../ut
 import { Link, useSearchParams } from "react-router-dom";
 import GraphQLQuery from "../../util/graphQLQuery";
 import { ProductContext } from "../../App";
-import { Link as StyleLink, Card, CardContent, CardMedia, Container, Grid, Typography, Pagination, List, ListItemButton, ListItemText, ListSubheader } from "@mui/material";
+import { Link as StyleLink, Card, CardContent, CardMedia, Container, Grid, Typography, Pagination, List, ListItemButton, ListItemText, ListSubheader, InputBase } from "@mui/material";
 import { createCategoryTree } from "../../util/CategoryTreeClass";
+import { SearchComp } from "../../components";
 
 const ProductsPage = () => {
     
@@ -68,8 +69,12 @@ const ProductsPage = () => {
         )
     }
 
+    // <SearchIconWrapper>
+    //                 <SearchIcon />
+    //                 </SearchIconWrapper>
+
     return (
-        <Grid container component='main' sx={{ py: 8, pb: '0px' }} >
+        <Grid container component='main' sx={{ py: 3, pb: '0px' }} >
             <Grid item md={3} >
                 <List 
                     component="nav"
@@ -85,6 +90,9 @@ const ProductsPage = () => {
                 </List>
             </Grid>
             <Grid item md={9} sx={{ pr: '10px' }} >
+                <Grid item md={12} >
+                    <SearchComp />
+                </Grid>
                 <Grid container spacing={4}>
                     {products.map((prod) => 
                     <Grid item key={prod.ID} xs={12} sm={6} md={4}>

@@ -6,6 +6,13 @@ import { useRef } from "react";
 const SearchComp = () => {
 
     const otherDetailInput = useRef();
+
+    const pressEnterHandler = async (e) => {
+        e.preventDefault();
+
+        console.log("se presiono enter xd")
+        console.log(e.key)
+    }
     
     return (
         <Box sx={{ 
@@ -27,6 +34,7 @@ const SearchComp = () => {
                 inputRef={otherDetailInput}
                 placeholder="Buscar..."
                 sx={{width: '200px', float: 'right'}}
+                onKeyDown={(e) => {if(e.key === 'Enter') return pressEnterHandler(e)}}
             />
         </Box>
     )

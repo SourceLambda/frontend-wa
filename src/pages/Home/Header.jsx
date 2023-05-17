@@ -19,7 +19,7 @@ const Header = ({profile}) => {
 	const clientView = () => {
 		return(
 			<>
-				<StyleLink component={Link} to="/" variant="button" sx={{ my: 1, mx: 1.5, color: 'white' }}>
+				<StyleLink component={Link} to="/shopping-cart" variant="button" sx={{ my: 1, mx: 1.5, color: 'white' }}>
 					Carrito
 				</StyleLink>
 				<StyleLink component={Link} to="/bill-history" variant="button" sx={{ my: 1, mx: 1.5, color: 'white' }}>

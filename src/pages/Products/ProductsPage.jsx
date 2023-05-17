@@ -69,10 +69,6 @@ const ProductsPage = () => {
         )
     }
 
-    // <SearchIconWrapper>
-    //                 <SearchIcon />
-    //                 </SearchIconWrapper>
-
     return (
         <Grid container component='main' sx={{ py: 3, pb: '0px' }} >
             <Grid item md={3} >
@@ -91,7 +87,7 @@ const ProductsPage = () => {
             </Grid>
             <Grid item md={9} sx={{ pr: '10px' }} >
                 <Grid item md={12} >
-                    <SearchComp />
+                    <SearchComp setProductsHandler={setProducts} />
                 </Grid>
                 <Grid container spacing={4}>
                     {products.map((prod) => 

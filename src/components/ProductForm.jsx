@@ -4,8 +4,9 @@ import { imageReference, uploadFile, deleteFile, imageNameReference } from "../u
 import GraphQLQuery from "../util/graphQLQuery"
 import { productMutation } from "../util/postMSQueries"
 import { createCategoryTree } from "../util/CategoryTreeClass"
-import { useNavigate } from "react-router-dom"
+import { json, useNavigate } from "react-router-dom"
 import SnackBarNotification from "./SnackBarNotification"
+import { indexProductQuery } from "../util/browserQueries"
 
 function ProductForm({ data, fetchedCategories }) {
 	
@@ -148,14 +149,28 @@ function ProductForm({ data, fetchedCategories }) {
 				techDetails,
 				otherDetails
 			}
-			const query = productMutation(data.post.ID, postData, data.dataType)
-			const response = await GraphQLQuery(query)
+			const newProductQuery = productMutation(data.post.ID, postData, data.dataType)
+			
+			const newProductResponse = await GraphQLQuery(newProductQuery);
+			const jsonResNewProduct = await newProductResponse.json()
+			
+			// apigateway have no response from ms in createPost query
+			if (jsonResNewProduct.data === null || jsonResNewProduct.errors) {
+			 	return Promise.reject({msg: "Error from ApiGateway", error: jsonResNewProduct.errors[0]});
+			}
 
-			// apigateway have no response from ms
-			const jsonRes = await response.json()
+			const indexProdQuery = indexProductQuery({
+				ID: data.post.ID || jsonResNewProduct.data.createPost,
+				Title: titleInput.current.value,
+				Description: descTextInput.current.value,
+				Category: categoryTree.getCategoryByID(category).Name,
+			})
+			const indexProdResponse = await GraphQLQuery(indexProdQuery);
+			const jsonResIndexProd = await indexProdResponse.json();
 
-			if (jsonRes.data === null || jsonRes.errors) {
-			 	return Promise.reject({msg: "Error from ApiGateway", error: jsonRes.errors[0]});
+			// apigateway have no response from ms in indexProduct query
+			if (jsonResIndexProd.data === null || jsonResIndexProd.errors) {
+			 	return Promise.reject({msg: "Error from ApiGateway", error: jsonResIndexProd.errors[0]});
 			}
 
 			setSnackBarInfo({

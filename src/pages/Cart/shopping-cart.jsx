@@ -29,17 +29,16 @@ const ShowCart = () => {
 
     }, [])
 
-const deleteItem = (id) => {
+const deleteItem = async (id) => {
     //el id debe ser { "itemId": "100"} donde 100 es el id del item
 
     const query = removeItem(userId, id );
     console.log(query)
-    const response = GraphQLQuery(query)
-    const jsonRes = response.json()
-    if (jsonRes.errors) {
-        return Promise.reject({msg: "Error response from ApiGateway", error: jsonRes.errors[0]});
+    const response =await  GraphQLQuery(query)
+    const jsonRes =response.json()
+  if (jsonRes.errors) {
+       return Promise.reject({msg: "Error response from ApiGateway", error: jsonRes.errors[0]});
     }
-    console.log(jsonRes.data)
 }
 
 
@@ -49,7 +48,7 @@ const deleteItem = (id) => {
             <div>
                 {
                 cart?.items.map((item) => (
-                    <Card>
+                    <Card key={item.itemId}>
 
                     <CardContent sx={{ minWidth: 275 ,border:'1px solid #E39050',width:1/4}} >   
                    
@@ -60,10 +59,12 @@ const deleteItem = (id) => {
                         async () => {
                             console.log(item)
                             console.log(cart.items)
-                            deleteItem(item.itemId)
+                            await deleteItem(item.itemId)
                             //elimina el item de la vista
                             console.log(cart.items)
-                            setCart(cart.items.filter((i) => i.itemId !== item.itemId))
+                            let newCart = cart.items.filter((i) => i.itemId !== item.itemId)
+                            console.log(newCart)
+                            setCart({ items: newCart})
                         }
                     }>Eliminar</Button>
                     </CardContent>

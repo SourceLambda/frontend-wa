@@ -44,37 +44,35 @@ const CreateBill = (shoppingCart) => {
                     <Typography sx={{ mb: 1.5 }} color="text.secondary">
                         {bill.state}
                     </Typography>
-                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                    <Typography sx={{ mb: 1.5 }} color="text.secondary"></Typography>
                         {bill.products.map((product) => (
-                            <Accordion>
+                            <Accordion key={product.name}>
                                 <AccordionSummary
                                     aria-controls="panel1a-content"
                                     id="panel1a-header"
                                 >
-                                    <Typography>{product.name}</Typography>
+                                    <Typography>Producto:{product.name}</Typography>
                                 </AccordionSummary>
                                 <AccordionDetails>
                                     <Grid container spacing={2}>
                                         <Grid item xs={12}>
+
+                                        </Grid>
+                                        <Grid item xs={12}>
                                             <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                                {product.description}
+                                                Precio:{product.price}
                                             </Typography>
                                         </Grid>
                                         <Grid item xs={12}>
                                             <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                                {product.price}
-                                            </Typography>
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                                {product.quantity}
+                                                Cantidad:{product.quantity}
                                             </Typography>
                                         </Grid>
                                     </Grid>
                                 </AccordionDetails>
                             </Accordion>
                         ))}
-                    </Typography>
+                    
                 </CardContent>
             </Card>                        
         <Button variant="contained" onClick={async () => {

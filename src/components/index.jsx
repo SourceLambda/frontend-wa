@@ -5,5 +5,7 @@ import SnackBarNotification from "./SnackBarNotification";
 import AddressForm from "./AddressForm";
 import ProfileForm from "./ProfileForm";
 import CardForm from "./CardForm";
+import SearchComp from "./SearchComp";
+import AddCartModal from "./AddCartModal";
 
-export { ProductForm, Review, ReviewForm, SnackBarNotification, AddressForm, ProfileForm, CardForm };
+export { ProductForm, Review, ReviewForm, SnackBarNotification, SearchComp, AddressForm, ProfileForm, CardForm, AddCartModal };

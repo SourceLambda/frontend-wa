@@ -1,11 +1,31 @@
 import { Box, InputBase } from "@mui/material";
 import { useRef } from "react";
+import { searchProductsQuery } from "../util/browserQueries";
+import GraphQLQuery from "../util/graphQLQuery";
 
 // best ally for new frontend devs = border: '2px solid #f00' 
 
-const SearchComp = () => {
+const SearchComp = ({ setProductsHandler }) => {
 
     const otherDetailInput = useRef();
+    
+    const pressEnterHandler = async (e) => {
+        e.preventDefault();
+
+        if (e.target.value === '') return
+        
+        const query = searchProductsQuery(e.target.value);
+
+        const response = await GraphQLQuery(query)
+        const jsonRes = await response.json()
+        
+        // apigateway have no response from ms
+        if (jsonRes.data === null || jsonRes.errors) {
+             return Promise.reject({msg: "Error response from ApiGateway", error: jsonRes?.errors[0]});
+        }
+
+        setProductsHandler(jsonRes.data.browse)
+    }
     
     return (
         <Box sx={{ 
@@ -27,6 +47,7 @@ const SearchComp = () => {
                 inputRef={otherDetailInput}
                 placeholder="Buscar..."
                 sx={{width: '200px', float: 'right'}}
+                onKeyDown={(e) => {if(e.key === 'Enter') return pressEnterHandler(e)}}
             />
         </Box>
     )

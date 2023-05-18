@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import { ProductContext } from "../../App"
-import { Review, ReviewForm, SnackBarNotification } from "../../components"
+import { AddCartModal, Review, ReviewForm, SnackBarNotification } from "../../components"
 import Modal from '@mui/material/Modal';
 import GraphQLQuery from "../../util/graphQLQuery"
 import { deleteProdMutation, getProductQuery, getReviewsQuery } from "../../util/postMSQueries"
@@ -21,6 +21,7 @@ const ProductInfoPage = () => {
     const { id } = useParams('id')
     const [reviews, setReviews] = useState([])
     const [modalOpen, setModalOpen] = useState(false);
+    const [addCartModalOpen, setAddCartModalOpen] = useState(false);
     const [snackBarInfo, setSnackBarInfo] = useState({
         message: '', 
         barType: 'info', 
@@ -69,18 +70,6 @@ const ProductInfoPage = () => {
         }
     }
 
-    useEffect(() => {
-        if (!selectedProduct) {
-            getProductRequest().then(res => {
-                res.ID = id
-                setSelectedProduct(res)
-            }).catch((err) => console.log(err))
-        }
-        getReviewsRequest().then(res => {
-            setReviews(res)
-        }).catch((err) => console.log(err))
-    }, [])
-
     const deleteProductRequest = async () => {
 
         if (!window.confirm('¿Está seguro de borrar este producto?')) {
@@ -119,6 +108,18 @@ const ProductInfoPage = () => {
 			})
         }
     }
+
+    useEffect(() => {
+        if (!selectedProduct) {
+            getProductRequest().then(res => {
+                res.ID = id
+                setSelectedProduct(res)
+            }).catch((err) => console.log(err))
+        }
+        getReviewsRequest().then(res => {
+            setReviews(res)
+        }).catch((err) => console.log(err))
+    }, [])
 
     if (selectedProduct) {
         return (
@@ -170,9 +171,11 @@ const ProductInfoPage = () => {
                         alt={selectedProduct.Title + " Image"}
                     />
                 </Card>
-                {localStorage.getItem('user-role') === 'customer' ? (<Box>
-                    <Button sx={{m: '20px'}} variant="contained" onClick={() => {setModalOpen(true)}}>Crear Reseña</Button>
-                </Box>) : null}
+                {localStorage.getItem('user-role') === 'customer' ? 
+                    (<Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-around', flexDirection: 'row' }} >
+                        <Button sx={{m: '20px'}} variant="contained" onClick={() => {setModalOpen(true)}}>Crear Reseña</Button>
+                        <Button sx={{m: '20px'}} variant="outlined" onClick={() => {setAddCartModalOpen(true)}}>Añadir al Carrito</Button>
+                    </Box>) : null}
 
                 <Grid container spacing={4} sx={{ m: '10px'}} >
                     {reviews.map(review => {
@@ -185,6 +188,11 @@ const ProductInfoPage = () => {
                     open={modalOpen}
                     onClose={() => {setModalOpen(false)}}
                     children={<div><ReviewForm reviewData={DEFAULT_REVIEW} postID={id} dataType={'create'} /></div>}
+                ></Modal>
+                <Modal
+                    open={addCartModalOpen}
+                    onClose={() => {setAddCartModalOpen(false)}}
+                    children={<div><AddCartModal productTitle={selectedProduct.Title} productID={id} /></div>}
                 ></Modal>
                 <SnackBarNotification sncBarData={snackBarInfo} />
             </>

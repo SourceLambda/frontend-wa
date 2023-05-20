@@ -17,9 +17,13 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 // refactor this component in UserForm and import it here
 const RegisterPage = () => {
-
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
     const [pass, setPass] = useState("");
+    const [tel,setTel] = useState("");
+    const [alternativeTel, setAlternativeTel] = useState("");
+    const [birthdate, setBirthdate] = useState("");
 
     const [snackBarInfo, setSnackBarInfo] = useState({
         message: '',
@@ -61,6 +65,11 @@ const RegisterPage = () => {
             console.log(err)
         }
     }
+
+    function something(value) {
+      console.log(JSON.stringify(value));
+    }
+    
     
     return (
         <>
@@ -86,6 +95,7 @@ const RegisterPage = () => {
                   id="firstName"
                   label="First Name"
                   autoFocus
+                  onChange = {(e)=>{something(e.target.value)}}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -96,6 +106,7 @@ const RegisterPage = () => {
                   label="Last Name"
                   name="lastName"
                   autoComplete="family-name"
+                  onChange = {(e)=>{something(e.target.value)}}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -106,6 +117,7 @@ const RegisterPage = () => {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
+                  onChange = {(e)=>{something(e.target.value)}}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -117,6 +129,7 @@ const RegisterPage = () => {
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                  onChange = {(e)=>{something(e.target.value)}}
                 />
                 
               </Grid>
@@ -129,6 +142,7 @@ const RegisterPage = () => {
                   type="Tel"
                   id="Tel"
                   autoComplete="new-tel"
+                  onChange = {(e)=>{something(e.target.value)}}
                 />
                 
               </Grid>
@@ -141,6 +155,7 @@ const RegisterPage = () => {
                   type="Alternative Tel"
                   id="Alternative Tel"
                   autoComplete="new-alternative-tel"
+                  onChange = {(e)=>{something(e.target.value)}}
                 />
                 
               </Grid>

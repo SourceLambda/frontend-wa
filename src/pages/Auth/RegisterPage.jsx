@@ -5,7 +5,10 @@ import { SnackBarNotification } from "../../components";
 
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 import Checkbox from '@mui/material/Checkbox';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
@@ -38,8 +41,13 @@ const RegisterPage = () => {
 
         try{
             const userData = {
+                firstName,
+                lastName,
                 email,
                 password: pass,
+                tel,
+                alternativeTel,
+                birthdate,
                 role: 'client'
             }
             const query = createUserQuery(userData)
@@ -71,7 +79,7 @@ const RegisterPage = () => {
     }
 
     function something2(value) {
-      console.log("Brian Crack!");
+      console.log(value);
     }
     
     
@@ -164,18 +172,34 @@ const RegisterPage = () => {
                 />
                 
               </Grid>
+            
               
             </Grid>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
       {/* I can pick the data I want bc this label returns a JSON, I can actually choose only the year, or month, or day, whatever I want */}
       <DatePicker onChange={(e)=>{setBirthdate(e)}}/>
-    </LocalizationProvider>   
+    </LocalizationProvider>  
+    <Grid item xs={12}>
+    <FormControl fullWidth>
+    <InputLabel id="Role">Role</InputLabel>
+    <Select
+      labelId="Role-Label"
+      id="Role"
+      label="Role"
+      onChange = {(e)=>{something2(e.target.value)}}
+    >
+      <MenuItem value={'Admin'}>Admin</MenuItem>
+    <MenuItem value={'Customer'}>Customer</MenuItem>
+    </Select>
+    </FormControl>
+                
+              </Grid> 
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              onClick={something2}
+              onClick={newUserHandler}
             >
               Sign Up
             </Button>

@@ -69,6 +69,10 @@ const RegisterPage = () => {
     function something(value) {
       console.log(JSON.stringify(value));
     }
+
+    function something(value) {
+      console.log(value);
+    }
     
     
     return (
@@ -95,7 +99,7 @@ const RegisterPage = () => {
                   id="firstName"
                   label="First Name"
                   autoFocus
-                  onChange = {(e)=>{something(e.target.value)}}
+                  onChange = {(e)=>{setFirstName(e.target.value)}}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -106,7 +110,7 @@ const RegisterPage = () => {
                   label="Last Name"
                   name="lastName"
                   autoComplete="family-name"
-                  onChange = {(e)=>{something(e.target.value)}}
+                  onChange = {(e)=>{setLastName(e.target.value)}}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -117,7 +121,7 @@ const RegisterPage = () => {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
-                  onChange = {(e)=>{something(e.target.value)}}
+                  onChange = {(e)=>{setEmail(e.target.value)}}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -129,7 +133,7 @@ const RegisterPage = () => {
                   type="password"
                   id="password"
                   autoComplete="new-password"
-                  onChange = {(e)=>{something(e.target.value)}}
+                  onChange = {(e)=>{setPass(e.target.value)}}
                 />
                 
               </Grid>
@@ -142,7 +146,7 @@ const RegisterPage = () => {
                   type="Tel"
                   id="Tel"
                   autoComplete="new-tel"
-                  onChange = {(e)=>{something(e.target.value)}}
+                  onChange = {(e)=>{setTel(e.target.value)}}
                 />
                 
               </Grid>
@@ -155,14 +159,15 @@ const RegisterPage = () => {
                   type="Alternative Tel"
                   id="Alternative Tel"
                   autoComplete="new-alternative-tel"
-                  onChange = {(e)=>{something(e.target.value)}}
+                  onChange = {(e)=>{setAlternativeTel(e.target.value)}}
                 />
                 
               </Grid>
               
             </Grid>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DatePicker />
+      {/* I can pick the data I want bc this label returns a JSON, I can actually choose only the year, or month, or day, whatever I want */}
+      <DatePicker onChange={(e)=>{something(e)}}/>
     </LocalizationProvider>   
             <Button
               type="submit"

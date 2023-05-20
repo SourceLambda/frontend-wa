@@ -27,6 +27,7 @@ const RegisterPage = () => {
     const [tel,setTel] = useState("");
     const [alternativeTel, setAlternativeTel] = useState("");
     const [birthdate, setBirthdate] = useState("");
+    const [role, setRole] = useState("");
 
     const [snackBarInfo, setSnackBarInfo] = useState({
         message: '',
@@ -48,8 +49,15 @@ const RegisterPage = () => {
                 tel,
                 alternativeTel,
                 birthdate,
-                role: 'client'
+                role
             }
+
+            if (true){
+              console.log(userData);
+              console.log("It got here!");
+              return
+            }
+
             const query = createUserQuery(userData)
 
             const response = await GraphQLQuery(query);
@@ -177,7 +185,7 @@ const RegisterPage = () => {
             </Grid>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
       {/* I can pick the data I want bc this label returns a JSON, I can actually choose only the year, or month, or day, whatever I want */}
-      <DatePicker onChange={(e)=>{setBirthdate(e)}}/>
+      <DatePicker onChange={(e)=>{setBirthdate({day:e.$D,month:e.$M,year:e.$y})}}/>
     </LocalizationProvider>  
     <Grid item xs={12}>
     <FormControl fullWidth>
@@ -186,7 +194,7 @@ const RegisterPage = () => {
       labelId="Role-Label"
       id="Role"
       label="Role"
-      onChange = {(e)=>{something2(e.target.value)}}
+      onChange = {(e)=>{setRole(e.target.value)}}
     >
       <MenuItem value={'Admin'}>Admin</MenuItem>
     <MenuItem value={'Customer'}>Customer</MenuItem>

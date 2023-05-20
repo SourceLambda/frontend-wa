@@ -52,12 +52,6 @@ const RegisterPage = () => {
                 role
             }
 
-            if (true){
-              console.log(userData);
-              console.log("It got here!");
-              return
-            }
-
             const query = createUserQuery(userData)
 
             const response = await GraphQLQuery(query);

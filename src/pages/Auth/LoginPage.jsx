@@ -32,6 +32,13 @@ const LoginPage = () => {
                 email,
                 password: pass,
             }
+
+            // if (true){
+            //     console.log(userData);
+            //     console.log("It got here!");
+            //     return
+            // }
+
             const query = loginUserQuery(userData)
 
             const response = await GraphQLQuery(query);
@@ -58,7 +65,13 @@ const LoginPage = () => {
             console.log(err)
         }
     }
-    
+    // function something2(value) {
+    //     console.log(value);
+    //     console.log("You just executed something2 function!!")
+    //   }
+      
+
+
     return (
         
         <>
@@ -89,6 +102,7 @@ const LoginPage = () => {
                 name="email"
                 autoComplete="email"
                 autoFocus
+                onChange={(e)=>{setEmail(e.target.value)}}
                 />
                 <TextField
                 margin="normal"
@@ -98,11 +112,13 @@ const LoginPage = () => {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                onChange={(e)=>{setPass(e.target.value)}}
                 />
                 <Button
                 type="submit"
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
+                onClick={loginHandler}
                 >
                 Sign In
                 </Button>

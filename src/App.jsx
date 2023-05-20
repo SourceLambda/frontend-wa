@@ -11,8 +11,36 @@ import { LoginPage, RegisterPage } from './pages/Auth'
 import ShowCart from './pages/Cart/shopping-cart'
 import { Profile, ProfileAddresses, ProfileCards, ProfilePage, ProfileForm } from './pages/Profile';
 import { AddressForm, CardForm } from './components'
+import { ThemeProvider, createTheme } from '@mui/material/styles'
 
 const ProductContext = createContext(null)
+
+// primary #ec4e20;
+// secundary #1a1f24; // el fondo es negro = #000000
+// text-pri #95a1ac;
+// text-sec #dbe2e7;
+// font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+
+const theme = createTheme({
+	palette: {
+		primary: {
+			main: '#000000',
+			secondary: '#ec4e20',
+			// light: '#ec4e20',
+			// dark: '#ec4e20',
+			textPrimary: '#95a1ac',
+			textSecondary: '#dbe2e7',
+		},
+	},
+	typography: {
+		fontFamily: [
+			'Impact', 
+			'Haettenschweiler', 
+			'"Arial Narrow Bold"', 
+			'sans-serif',
+		].join(',')
+	}
+});
 
 function App() {
 
@@ -38,6 +66,7 @@ function App() {
 	
 	return (
 		<ProductContext.Provider value={{selectedProduct, setSelectedProduct}}>
+			<ThemeProvider theme={theme}>
 			<Router>
 				<Header profile={profile}/>
 				<Routes>
@@ -67,6 +96,7 @@ function App() {
 				</Routes>
 				<Footer />
 			</Router>
+			</ThemeProvider>
 		</ProductContext.Provider>
 /* 		<ProfileContext.Provider value={{Profile, setProfile}}>
 			<Router>

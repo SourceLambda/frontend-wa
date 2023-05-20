@@ -70,8 +70,8 @@ const RegisterPage = () => {
       console.log(JSON.stringify(value));
     }
 
-    function something(value) {
-      console.log(value);
+    function something2(value) {
+      console.log("Brian Crack!");
     }
     
     
@@ -88,7 +88,8 @@ const RegisterPage = () => {
           }}
         >
             <h3>Sign Up</h3>
-                <Box component="form" noValidate onSubmit={newUserHandler} sx={{ mt: 3 }}>
+            {/* <Box component="form" noValidate onSubmit={something2} sx={{ mt: 3 }}></Box> */}
+                <Box component="form" Validate sx={{ mt: 3 }}>
                 <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -167,13 +168,14 @@ const RegisterPage = () => {
             </Grid>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
       {/* I can pick the data I want bc this label returns a JSON, I can actually choose only the year, or month, or day, whatever I want */}
-      <DatePicker onChange={(e)=>{something(e)}}/>
+      <DatePicker onChange={(e)=>{setBirthdate(e)}}/>
     </LocalizationProvider>   
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              onClick={something2}
             >
               Sign Up
             </Button>

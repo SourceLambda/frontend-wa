@@ -35,7 +35,7 @@ const SearchComp = ({ setProductsHandler }) => {
             display: 'flex', 
             borderRadius: '10px', 
             border: '2px solid black',
-            borderColor: 'secundary'
+            borderColor: 'primary.secondary'
             }}>
             <Box sx={{ display: 'flex', alignItems: 'center', mr: 2, ml: 2, float: 'left' }} >
                 <Box sx={{ width: '30px', height: '30px' }} >

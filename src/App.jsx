@@ -15,12 +15,6 @@ import { ThemeProvider, createTheme } from '@mui/material/styles'
 
 const ProductContext = createContext(null)
 
-// primary #ec4e20;
-// secundary #1a1f24; // el fondo es negro = #000000
-// text-pri #95a1ac;
-// text-sec #dbe2e7;
-// font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-
 const theme = createTheme({
 	palette: {
 		primary: {
@@ -31,15 +25,20 @@ const theme = createTheme({
 			textPrimary: '#95a1ac',
 			textSecondary: '#dbe2e7',
 		},
+		secondary: {
+			main: '#ec4e20',
+		}
 	},
-	typography: {
-		fontFamily: [
-			'Impact', 
-			'Haettenschweiler', 
-			'"Arial Narrow Bold"', 
-			'sans-serif',
-		].join(',')
-	}
+	// aqui se especifica la fuente, se convierte a array la prop de css:
+	// font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+	// typography: {
+	// 	fontFamily: [
+	// 		'Impact', 
+	// 		'Haettenschweiler', 
+	// 		'"Arial Narrow Bold"', 
+	// 		'sans-serif',
+	// 	].join(',')
+	// }
 });
 
 function App() {

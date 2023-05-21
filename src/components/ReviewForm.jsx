@@ -119,7 +119,7 @@ const ReviewForm = ({ reviewData, postID, dataType }) => {
                         />
                     </Grid>
                     <Grid item >
-                        <Button onClick={alterReview} >Guardar Reseña</Button>
+                        <Button onClick={alterReview} color='secondary' >Guardar Reseña</Button>
                     </Grid>
                 </Grid>
             </Box>

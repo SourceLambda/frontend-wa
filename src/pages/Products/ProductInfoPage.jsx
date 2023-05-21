@@ -151,17 +151,17 @@ const ProductInfoPage = () => {
                             Unidades: {selectedProduct.Units}
                         </Typography>
                         <Typography variant="subtitle1">
-                            Precio: {selectedProduct.Price}
+                            Precio: ${selectedProduct.Price}
                         </Typography>
                         <Typography variant="subtitle1">
                             Rating: {(selectedProduct.Sum_ratings / selectedProduct.Num_ratings) || selectedProduct.Num_ratings}
                         </Typography>
                         {localStorage.getItem('user-role') === 'admin' ? 
                         (<Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-around', flexDirection: 'row' }} >
-                            <Button variant="outlined">
-                                <Link to={"/edit-product"} style={{ textDecoration:'none', color:'blue' }}>Editar Producto</Link>
-                            </Button>
-                            <Button variant="outlined" color="error" onClick={deleteProductRequest}>Eliminar Producto</Button>
+                            <Link to={"/edit-product"} style={{ textDecoration:'none' }}>
+                                <Button variant="outlined" color='primary' >Editar Producto</Button>
+                            </Link>
+                            <Button variant="outlined" color='secondary' onClick={deleteProductRequest}>Eliminar Producto</Button>
                         </Box>) : null}
                     </CardContent>
                     <CardMedia
@@ -173,8 +173,8 @@ const ProductInfoPage = () => {
                 </Card>
                 {localStorage.getItem('user-role') === 'customer' ? 
                     (<Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-around', flexDirection: 'row' }} >
-                        <Button sx={{m: '20px'}} variant="contained" onClick={() => {setModalOpen(true)}}>Crear Reseña</Button>
-                        <Button sx={{m: '20px'}} variant="outlined" onClick={() => {setAddCartModalOpen(true)}}>Añadir al Carrito</Button>
+                        <Button sx={{m: '20px'}} variant="contained" color='secondary' onClick={() => {setModalOpen(true)}}>Crear Reseña</Button>
+                        <Button sx={{m: '20px'}} variant="contained" color='secondary' onClick={() => {setAddCartModalOpen(true)}}>Añadir al Carrito</Button>
                     </Box>) : null}
 
                 <Grid container spacing={4} sx={{ m: '10px'}} >

@@ -103,7 +103,7 @@ const ProductsPage = () => {
                                 sx={{ height: 'min-content' }}
                             >
                                 <Typography gutterBottom variant="h5" component="h2" >
-                                    <StyleLink component={Link} to={`/products/${prod.ID}`} onClick={() => setSelectedProduct(prod)}>{prod.Title}</StyleLink>
+                                    <StyleLink component={Link} color='secondary' to={`/products/${prod.ID}`} onClick={() => setSelectedProduct(prod)}>{prod.Title}</StyleLink>
                                 </Typography>
                                 <Typography variant="h6">{prod.Description.Brand}</Typography>
                                 <Typography>Precio: ${prod.Price}</Typography>

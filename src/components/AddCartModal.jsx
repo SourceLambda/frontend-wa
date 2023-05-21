@@ -90,7 +90,7 @@ const AddCartModal = ({ productTitle, productID }) => {
                         />
                     </Grid>
                     <Grid item >
-                        <Button onClick={addItemToShoppingCart} >Añadir al Carrito</Button>
+                        <Button onClick={addItemToShoppingCart} color='secondary' >Añadir al Carrito</Button>
                     </Grid>
                 </Grid>
             </Box>

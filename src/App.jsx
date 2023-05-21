@@ -47,7 +47,7 @@ function App() {
 	const [profile, setProfile] = useState({});
 
     useEffect(() => {
-         const query = getProfileById(775);
+         const query = getProfileById("fb7e5cf4-5c1c-4598-8265-751613148ce8");
          const getProfile = async() => {
              const res = await GraphQLQuery(query);
              const jsonRes = await res.json();

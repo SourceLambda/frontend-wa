@@ -11,7 +11,7 @@ const Profile = ({profile}) => {
             <br />
             <Card sx={{ maxWidth: 500 }}>
                 <CardContent>
-                    <Typography sx={{ fontSize: 20 }} color="text.secondary" gutterBottom>
+                    <Typography sx={{ fontSize: 20 }} color="text.secondary" gutterBottom >
                         {profile.firstname + " " + profile.lastname}
                     </Typography>
                     

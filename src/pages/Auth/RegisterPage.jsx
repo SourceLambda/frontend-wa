@@ -19,6 +19,7 @@ import * as React from "react";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { createProfile } from "../../util/profileMSQueries";
 
 // refactor this component in UserForm and import it here
 const RegisterPage = () => {
@@ -54,16 +55,37 @@ const RegisterPage = () => {
         role,
       };
 
+      const profileCreation = {
+        firstname: firstName,
+        lastname: lastName,
+        email: email,
+        password: pass,
+        telNumber: tel,
+        alternativeNumber: alternativeTel,
+        birthday: birthdate,
+        role: role
+      };
+
       const query = createUserQuery(userData);
+      const queryProfile = createProfile(profileCreation);
 
       const response = await GraphQLQuery(query);
+      const responseProfile = await GraphQLQuery(queryProfile);
+
       const json = await response.json();
+      const jsonProfile = await responseProfile.json();
 
       // error from apigateway
       if (!json.data === null || json.errors) {
         return Promise.reject({
           msg: "Error response from Api Gateway",
           error: json?.errors[0],
+        });
+      }
+      if (!jsonProfile.data === null || jsonProfile.errors) {
+        return Promise.reject({
+          msg: "Error response from Api Gateway",
+          error: jsonProfile?.errors[0],
         });
       }
 
@@ -207,14 +229,18 @@ const RegisterPage = () => {
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                {/* I can pick the data I want bc this label returns a JSON, I can actually choose only the year, or month, or day, whatever I want */}
-                <DatePicker
-                  onChange={(e) => {
-                    setBirthdate({ day: e.$D, month: e.$M, year: e.$y });
-                  }}
-                />
-              </LocalizationProvider>
+              <TextField
+                required
+                fullWidth
+                name="birthday"
+                label="birthday"
+                type="date"
+                id="birthday"
+                autoComplete="birthday"
+                onChange={(e) => {
+                  setBirthdate(e.target.value);
+                }}
+              />
             </Grid>
             <Grid item xs={12} sm={6}>
               <FormControl fullWidth>

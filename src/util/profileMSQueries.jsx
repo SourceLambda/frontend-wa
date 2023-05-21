@@ -1,7 +1,7 @@
 export function getProfileById(id_profile){
     return `
     query {
-        profileById(id: ${id_profile}) {
+        profileById(id: "${id_profile}") {
             idProfile
             firstname
             lastname
@@ -19,7 +19,7 @@ export function getProfileById(id_profile){
 export function getAddressesByProfile(id_profile){
     return `
     query {
-        addressessByProfileId(id_profile: ${id_profile}){
+        addressessByProfileId(id_profile: "${id_profile}"){
           idAddress
           address
           detailAddress
@@ -31,7 +31,7 @@ export function getAddressesByProfile(id_profile){
 export function getAddressFromProfileAddresses(id_profile, id_address){
     return `
     query {
-        addressFromProfileAddresses(id_profile: ${id_profile}, id_address: ${id_address}){
+        addressFromProfileAddresses(id_profile: "${id_profile}", id_address: ${id_address}){
           idAddress
           address
           detailAddress
@@ -43,7 +43,7 @@ export function getAddressFromProfileAddresses(id_profile, id_address){
 export function getCardsByProfile(id_profile){
     return `
     query {
-        cardsByProfileId(id_profile: ${id_profile}){
+        cardsByProfileId(id_profile: "${id_profile}"){
           idCard
           cardNumber
           cardNickname
@@ -55,7 +55,7 @@ export function getCardsByProfile(id_profile){
 export function getCardFromProfileCards(id_profile, id_card){
     return `
     query {
-        cardFromProfileCards(id_profile: ${id_profile}, id_card: ${id_card}){
+        cardFromProfileCards(id_profile: "${id_profile}", id_card: ${id_card}){
           idCard
           cardNumber
           cardNickname
@@ -67,7 +67,7 @@ export function getCardFromProfileCards(id_profile, id_card){
 export function deleteAddress(id_profile, id_address){
     const query = `
     mutation {
-        deleteAddress(id_profile: ${id_profile}, id_address: ${id_address})
+        deleteAddress(id_profile: "${id_profile}", id_address: ${id_address})
       }
     `;
     
@@ -77,7 +77,7 @@ export function deleteAddress(id_profile, id_address){
 export function deleteCard(id_profile, id_card){
     const query = `
     mutation {
-        deleteCard(id_profile: ${id_profile}, id_card: ${id_card})
+        deleteCard(id_profile: "${id_profile}", id_card: ${id_card})
       }
     `;
     
@@ -87,7 +87,7 @@ export function deleteCard(id_profile, id_card){
 export function createCardToProfile(id_profile, card){
     const query = `
     mutation {
-      createCardToProfile(id_profile: ${id_profile}, card: {
+      createCardToProfile(id_profile: "${id_profile}", card: {
         cardName: "${card.cardName}", 
         expirationDate: "${card.expirationDate}", 
         cardNickname: "${card.cardNickname}", 
@@ -106,7 +106,7 @@ export function createAddressToProfile(id_profile, addr){
     const {address, detailAddress} = addr
     const query = `
     mutation {
-      createAddressToProfile(id_profile: ${id_profile}, address: {
+      createAddressToProfile(id_profile: "${id_profile}", address: {
         address: "${address}",
         detailAddress: "${detailAddress}"
       }){
@@ -148,7 +148,7 @@ export function updateProfile(id_profile, profile){
 
     const query = `
     mutation {
-        updateProfile(id_profile: ${id_profile}, profile: {
+        updateProfile(id_profile: "${id_profile}", profile: {
           idProfile: ${idProfile},
           firstname: "${firstname}",
           lastname: "${lastname}",
@@ -170,3 +170,49 @@ export function updateProfile(id_profile, profile){
     return query;
 }
 
+export function createProfile(profile){
+  const { firstname, lastname, telNumber, email, password, birthday, alternativeNumber, role} = profile;
+  const query = `
+    mutation {
+        createProfile( profile: {
+          firstname: "${firstname}",
+          lastname: "${lastname}",
+          telNumber: ${telNumber},
+          email: "${email}",
+          password: "${password}",
+          birthday: "${birthday}",
+          alternativeNumber: ${alternativeNumber},
+          role: "${role}"
+        }){
+          idProfile
+        }
+      }
+      
+    `;
+    
+    return query;
+}
+
+export function loginToProfile(credentials){
+  const {email, password} = credentials;
+
+  const query = `
+    mutation {
+      loginToProfile(credentials: {
+        email: "${email}"
+        password: "${password}"
+      }){
+        idProfile
+        firstname
+        lastname
+        telNumber
+        email
+        password
+        birthday
+        alternativeNumber
+        role
+      }
+  }`;
+
+  return query;
+}

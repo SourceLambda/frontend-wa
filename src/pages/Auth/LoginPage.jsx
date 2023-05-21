@@ -9,6 +9,7 @@ import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Link from "@mui/material/MenuItem";
 import Grid from "@mui/material/Grid";
+import { loginToProfile } from "../../util/profileMSQueries";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -50,6 +51,21 @@ const LoginPage = () => {
           error: json?.errors[0],
         });
       }
+
+      const queryProfile = loginToProfile(userData);
+
+      const responseProfile = await GraphQLQuery(queryProfile);
+      const jsonProfile = await responseProfile.json();
+
+      // error from apigateway
+      if (!jsonProfile.data === null || jsonProfile.errors) {
+        return Promise.reject({
+          msg: "Error response from Api Gateway",
+          error: jsonProfile?.errors[0],
+        });
+      }
+
+
 
       // json.data.loginUser = {token: "...", user: {id, email, role}}
       localStorage.setItem("user-role", json.data.loginUser.user.role);

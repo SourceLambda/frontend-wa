@@ -259,7 +259,7 @@ function ProductForm({ data, fetchedCategories }) {
 							</FormControl>
 							<Typography variant='h6' >
 								Categoria: {categoryString}
-								<Button variant="contained" component="label" disabled={categoryString === ""} onClick={(e) => {
+								<Button variant="contained" color='secondary' component="label" disabled={categoryString === ""} onClick={(e) => {
 									e.preventDefault()
 
 									setCategoryString("")
@@ -316,6 +316,7 @@ function ProductForm({ data, fetchedCategories }) {
 																	e.preventDefault()
 																	handleDeleteDetail(e, detail, 'TECH')
 																}}
+																color='secondary'
 															>Borrar</Button>
 														</Box>
 													})}
@@ -340,6 +341,7 @@ function ProductForm({ data, fetchedCategories }) {
 														e.preventDefault()
 														handlerDetail(e, "TECH")
 													}}
+													color='secondary'
 												>+</Button>
 											</Box>
 										</Box>
@@ -360,6 +362,7 @@ function ProductForm({ data, fetchedCategories }) {
 																	e.preventDefault()
 																	handleDeleteDetail(e, detail, 'OTHER')
 																}}
+																color='secondary'
 															>Borrar</Button>
 														</Box>
 													})}
@@ -384,6 +387,7 @@ function ProductForm({ data, fetchedCategories }) {
 														e.preventDefault()
 														handlerDetail(e, "OTHER")
 													}}
+													color='secondary'
 												>+</Button>
 											</Box>
 										</Box>
@@ -428,7 +432,7 @@ function ProductForm({ data, fetchedCategories }) {
 								alt="Carga una imagen del producto"
 								sx={{width: '200px'}}
 							/>
-							<Button variant="outlined" component="label" >
+							<Button variant="outlined" color='secondary' component="label" >
 								Subir Imagen
 								<input
 									type="file"
@@ -440,7 +444,7 @@ function ProductForm({ data, fetchedCategories }) {
 							</Button>
 						</Grid>
 						<Grid item >
-							<Button variant="contained" onClick={createPost} >Publicar Producto</Button>
+							<Button variant="contained" color='secondary' onClick={createPost} >Publicar Producto</Button>
 						</Grid>
 					</Grid>
 				</Paper>

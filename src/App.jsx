@@ -7,12 +7,39 @@ import GraphQLQuery from './util/graphQLQuery'
 
 import { ProductFormPage, ProductInfoPage, ProductsPage } from './pages/Products'
 import { BillHistory, CreateBill } from './pages/Bills';
-import { LoginPage, RegisterPage } from './pages/Auth'
+import { LoginPage, RegisterPage, RecoveryPage } from './pages/Auth'
 import ShowCart from './pages/Cart/shopping-cart'
 import { Profile, ProfileAddresses, ProfileCards, ProfilePage, ProfileForm } from './pages/Profile';
 import { AddressForm, CardForm } from './components'
+import { ThemeProvider, createTheme } from '@mui/material/styles'
 
 const ProductContext = createContext(null)
+
+const theme = createTheme({
+	palette: {
+		primary: {
+			main: '#000000',
+			secondary: '#ec4e20',
+			// light: '#ec4e20',
+			// dark: '#ec4e20',
+			textPrimary: '#95a1ac',
+			textSecondary: '#dbe2e7',
+		},
+		secondary: {
+			main: '#ec4e20',
+		}
+	},
+	// aqui se especifica la fuente, se convierte a array la prop de css:
+	// font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+	// typography: {
+	// 	fontFamily: [
+	// 		'Impact', 
+	// 		'Haettenschweiler', 
+	// 		'"Arial Narrow Bold"', 
+	// 		'sans-serif',
+	// 	].join(',')
+	// }
+});
 
 function App() {
 
@@ -38,12 +65,14 @@ function App() {
 	
 	return (
 		<ProductContext.Provider value={{selectedProduct, setSelectedProduct}}>
+			<ThemeProvider theme={theme}>
 			<Router>
 				<Header profile={profile}/>
 				<Routes>
 					<Route path="/" element={<HomePage/>}></Route>
 					<Route path="/login" element={<LoginPage/>}></Route>
 					<Route path="/register" element={<RegisterPage/>}></Route>
+					<Route path="/recovery" element={<RecoveryPage/>}></Route>
 
 					<Route path="/products" element={<ProductsPage/>}></Route>
 					<Route path="/products/:id" element={<ProductInfoPage/>}></Route>
@@ -67,6 +96,7 @@ function App() {
 				</Routes>
 				<Footer />
 			</Router>
+			</ThemeProvider>
 		</ProductContext.Provider>
 /* 		<ProfileContext.Provider value={{Profile, setProfile}}>
 			<Router>

@@ -71,7 +71,7 @@ const LoginPage = () => {
   //     console.log("You just executed something2 function!!")
   //   }
 
-  const loginRedirect = async (e) =>{
+  const loginRedirect = async (e) => {
     window.location.assign("/register");
   };
 
@@ -81,12 +81,25 @@ const LoginPage = () => {
         <Box
           sx={{
             marginTop: 8,
-            marginLeft: 50,
-            marginRight: 50,
+            //marginLeft: 50,
+            marginLeft: {
+              xs: 10,
+              sm: 20,
+              md: 30,
+              lg: 50,
+              xl: 60,
+            },
+            //marginRight: 50,
+            marginRight: {
+              xs: 10,
+              sm: 20,
+              md: 30,
+              lg: 50,
+              xl: 60,
+            },
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            
           }}
         >
           <h3>Sign In</h3>
@@ -131,21 +144,17 @@ const LoginPage = () => {
             Sign In
           </Button>
           <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link 
-                href="#" 
-                variant="body2"
-                onClick={loginRedirect}
-                >
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid>
+            <Grid item xs>
+              <Link href="#" variant="body2">
+                Forgot password?
+              </Link>
             </Grid>
+            <Grid item>
+              <Link href="#" variant="body2" onClick={loginRedirect}>
+                {"Don't have an account? Sign Up"}
+              </Link>
+            </Grid>
+          </Grid>
           {/* <input id="password-input" type="password" onChange={(e)=>{setPass(e.target.value)}} ></input>
                 <label htmlFor="password-input"></label>
                 <button onClick={loginHandler} >Ingresar</button> */}

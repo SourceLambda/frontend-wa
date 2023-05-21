@@ -90,109 +90,128 @@ const RegisterPage = () => {
     <>
       <form>
         <Box
+          component="form"
+          Validate
           sx={{
             marginTop: 8,
+            marginLeft: {
+              xs: 10,
+              sm: 20,
+              md: 30,
+              lg: 40,
+              xl: 50,
+            },
+            //marginRight: 50,
+            marginRight: {
+              xs: 10,
+              sm: 20,
+              md: 30,
+              lg: 40,
+              xl: 50,
+            },
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
+            //bgcolor: "red"
           }}
         >
           <h3>Sign Up</h3>
           {/* <Box component="form" noValidate onSubmit={something2} sx={{ mt: 3 }}></Box> */}
-          <Box component="form" Validate sx={{ mt: 3 }}>
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  autoComplete="given-name"
-                  name="firstName"
-                  required
-                  fullWidth
-                  id="firstName"
-                  label="First Name"
-                  autoFocus
-                  onChange={(e) => {
-                    setFirstName(e.target.value);
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="family-name"
-                  onChange={(e) => {
-                    setLastName(e.target.value);
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                  onChange={(e) => {
-                    setEmail(e.target.value);
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
-                  onChange={(e) => {
-                    setPass(e.target.value);
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="Tel"
-                  label="Tel"
-                  type="Tel"
-                  id="Tel"
-                  autoComplete="new-tel"
-                  onChange={(e) => {
-                    setTel(e.target.value);
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="Alternative Tel"
-                  label="Alternative Tel"
-                  type="Alternative Tel"
-                  id="Alternative Tel"
-                  autoComplete="new-alternative-tel"
-                  onChange={(e) => {
-                    setAlternativeTel(e.target.value);
-                  }}
-                />
-              </Grid>
-            </Grid>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              {/* I can pick the data I want bc this label returns a JSON, I can actually choose only the year, or month, or day, whatever I want */}
-              <DatePicker
+          {/* <Box component="form" Validate sx={{ mt: 3 }}> */}
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                autoComplete="given-name"
+                name="firstName"
+                required
+                fullWidth
+                id="firstName"
+                label="First Name"
+                autoFocus
                 onChange={(e) => {
-                  setBirthdate({ day: e.$D, month: e.$M, year: e.$y });
+                  setFirstName(e.target.value);
                 }}
               />
-            </LocalizationProvider>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                required
+                fullWidth
+                id="lastName"
+                label="Last Name"
+                name="lastName"
+                autoComplete="family-name"
+                onChange={(e) => {
+                  setLastName(e.target.value);
+                }}
+              />
+            </Grid>
             <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                id="email"
+                label="Email Address"
+                name="email"
+                autoComplete="email"
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                autoComplete="new-password"
+                onChange={(e) => {
+                  setPass(e.target.value);
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                required
+                fullWidth
+                name="Tel"
+                label="Tel"
+                type="Tel"
+                id="Tel"
+                autoComplete="new-tel"
+                onChange={(e) => {
+                  setTel(e.target.value);
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                required
+                fullWidth
+                name="Alternative Tel"
+                label="Alternative Tel"
+                type="Alternative Tel"
+                id="Alternative Tel"
+                autoComplete="new-alternative-tel"
+                onChange={(e) => {
+                  setAlternativeTel(e.target.value);
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                {/* I can pick the data I want bc this label returns a JSON, I can actually choose only the year, or month, or day, whatever I want */}
+                <DatePicker
+                  onChange={(e) => {
+                    setBirthdate({ day: e.$D, month: e.$M, year: e.$y });
+                  }}
+                />
+              </LocalizationProvider>
+            </Grid>
+            <Grid item xs={12} sm={6}>
               <FormControl fullWidth>
                 <InputLabel id="Role">Role</InputLabel>
                 <Select
@@ -208,21 +227,22 @@ const RegisterPage = () => {
                 </Select>
               </FormControl>
             </Grid>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-              onClick={newUserHandler}
-            >
-              Sign Up
-            </Button>
-            {/* <input id="email-input" onChange={(e)=>{setEmail(e.target.value)}} ></input>
+          </Grid>
+
+          <Button
+            type="submit"
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+            onClick={newUserHandler}
+          >
+            Sign Up
+          </Button>
+          {/* <input id="email-input" onChange={(e)=>{setEmail(e.target.value)}} ></input>
                 <label htmlFor="email-input"></label>
                 <input id="password-input" type="password" onChange={(e)=>{setPass(e.target.value)}} ></input>
                 <label htmlFor="password-input"></label>
                 <button onClick={newUserHandler} >Registrarse</button> */}
-          </Box>
+          {/* </Box> */}
         </Box>
       </form>
       <SnackBarNotification sncBarData={snackBarInfo} />

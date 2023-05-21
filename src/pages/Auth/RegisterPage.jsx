@@ -3,164 +3,263 @@ import { createUserQuery } from "../../util/authQueries";
 import GraphQLQuery from "../../util/graphQLQuery";
 import { SnackBarNotification } from "../../components";
 
-import Grid from '@mui/material/Grid';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
+import Grid from "@mui/material/Grid";
+import TextField from "@mui/material/TextField";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import Link from "@mui/material/Link";
 
-import * as React from 'react';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import Checkbox from "@mui/material/Checkbox";
+import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
+
+import * as React from "react";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 // refactor this component in UserForm and import it here
 const RegisterPage = () => {
-	
-	const [email, setEmail] = useState("");
-	const [pass, setPass] = useState("");
-	
-	const [snackBarInfo, setSnackBarInfo] = useState({
-		message: '',
-		barType: 'info',
-		time: 3000,
-		state: false,
-		redirectHandler: () => {}
-	})
-	
-	const newUserHandler = async (e) => {
-		e.preventDefault();
-		
-		try{
-			const userData = {
-				email,
-				password: pass,
-				role: 'customer'
-			}
-			const query = createUserQuery(userData)
-			
-			const response = await GraphQLQuery(query);
-			const json = await response.json();
-			
-			// error from apigateway
-			if (!json.data === null || json.errors) {
-				return Promise.reject({msg: "Error response from Api Gateway", error: json?.errors[0]})
-			}
-			
-			setSnackBarInfo({
-				message: 'Usuario registrado correctamente.',
-				type: 'success',
-				time: 1000,
-				state: true,
-				redirectHandler: () => window.location.assign('/login')
-			})
-			
-		}
-		catch (err) {
-			console.log(err)
-		}
-	}
-	
-	return (
-		<>
-			<Box
-			sx={{
-				marginTop: 8,
-				display: 'flex',
-				flexDirection: 'column',
-				alignItems: 'center',
-			}}
-			>
-				<h3>Sign Up</h3>
-				<Box component="form" noValidate onSubmit={newUserHandler} sx={{ mt: 3 }}>
-					<Grid container spacing={2}>
-						<Grid item xs={12} sm={6}>
-							<TextField
-							autoComplete="given-name"
-							name="firstName"
-							required
-							fullWidth
-							id="firstName"
-							label="First Name"
-							autoFocus
-							/>
-						</Grid>
-						<Grid item xs={12} sm={6}>
-							<TextField
-							required
-							fullWidth
-							id="lastName"
-							label="Last Name"
-							name="lastName"
-							autoComplete="family-name"
-							/>
-						</Grid>
-						<Grid item xs={12}>
-							<TextField
-							required
-							fullWidth
-							id="email"
-							label="Email Address"
-							name="email"
-							autoComplete="email"
-							/>
-						</Grid>
-						<Grid item xs={12}>
-							<TextField
-							required
-							fullWidth
-							name="password"
-							label="Password"
-							type="password"
-							id="password"
-							autoComplete="new-password"
-							/>
-						</Grid>
-						<Grid item xs={12}>
-							<TextField
-							required
-							fullWidth
-							name="Tel"
-							label="Tel"
-							type="Tel"
-							id="Tel"
-							autoComplete="new-tel"
-							/>
-						</Grid>
-						<Grid item xs={12}>
-							<TextField
-							required
-							fullWidth
-							name="Alternative Tel"
-							label="Alternative Tel"
-							type="Alternative Tel"
-							id="Alternative Tel"
-							autoComplete="new-alternative-tel"
-							/>
-						</Grid>
-					</Grid>
-					<LocalizationProvider dateAdapter={AdapterDayjs}>
-						<DatePicker />
-					</LocalizationProvider>   
-					<Button
-					type="submit"
-					fullWidth
-					variant="contained"
-					sx={{ mt: 3, mb: 2 }}
-					>
-					Sign Up
-					</Button>
-					{/* <input id="email-input" onChange={(e)=>{setEmail(e.target.value)}} ></input>
-					<label htmlFor="email-input"></label>
-					<input id="password-input" type="password" onChange={(e)=>{setPass(e.target.value)}} ></input>
-					<label htmlFor="password-input"></label>
-				<button onClick={newUserHandler} >Registrarse</button> */}
-				</Box>
-			</Box>
-			<SnackBarNotification sncBarData={snackBarInfo} />
-		</>
-	)   
-}
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [pass, setPass] = useState("");
+  const [tel, setTel] = useState("");
+  const [alternativeTel, setAlternativeTel] = useState("");
+  const [birthdate, setBirthdate] = useState("");
+  const [role, setRole] = useState("");
+
+  const [snackBarInfo, setSnackBarInfo] = useState({
+    message: "",
+    barType: "info",
+    time: 3000,
+    state: false,
+    redirectHandler: () => {},
+  });
+
+  const newUserHandler = async (e) => {
+    e.preventDefault();
+
+    try {
+      const userData = {
+        firstName,
+        lastName,
+        email,
+        password: pass,
+        tel,
+        alternativeTel,
+        birthdate,
+        role,
+      };
+
+      const query = createUserQuery(userData);
+
+      const response = await GraphQLQuery(query);
+      const json = await response.json();
+
+      // error from apigateway
+      if (!json.data === null || json.errors) {
+        return Promise.reject({
+          msg: "Error response from Api Gateway",
+          error: json?.errors[0],
+        });
+      }
+
+      setSnackBarInfo({
+        message: "Usuario registrado correctamente.",
+        type: "success",
+        time: 1000,
+        state: true,
+        redirectHandler: () => window.location.assign("/login"),
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  function something(value) {
+    console.log(JSON.stringify(value));
+  }
+
+  function something2(value) {
+    console.log(value);
+  }
+
+  const registerRedirectLogin = async (e) => {
+    window.location.assign("/login");
+  };
+
+  return (
+    <>
+      <form>
+        <Box
+          component="form"
+          Validate
+          sx={{
+            marginTop: 8,
+            marginLeft: {
+              xs: 10,
+              sm: 20,
+              md: 30,
+              lg: 40,
+              xl: 50,
+            },
+            //marginRight: 50,
+            marginRight: {
+              xs: 10,
+              sm: 20,
+              md: 30,
+              lg: 40,
+              xl: 50,
+            },
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            //bgcolor: "red"
+          }}
+        >
+          <h3>Sign Up</h3>
+          {/* <Box component="form" noValidate onSubmit={something2} sx={{ mt: 3 }}></Box> */}
+          {/* <Box component="form" Validate sx={{ mt: 3 }}> */}
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                autoComplete="given-name"
+                name="firstName"
+                required
+                fullWidth
+                id="firstName"
+                label="First Name"
+                autoFocus
+                onChange={(e) => {
+                  setFirstName(e.target.value);
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                required
+                fullWidth
+                id="lastName"
+                label="Last Name"
+                name="lastName"
+                autoComplete="family-name"
+                onChange={(e) => {
+                  setLastName(e.target.value);
+                }}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                id="email"
+                label="Email Address"
+                name="email"
+                autoComplete="email"
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                autoComplete="new-password"
+                onChange={(e) => {
+                  setPass(e.target.value);
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                required
+                fullWidth
+                name="Tel"
+                label="Tel"
+                type="Tel"
+                id="Tel"
+                autoComplete="new-tel"
+                onChange={(e) => {
+                  setTel(e.target.value);
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                required
+                fullWidth
+                name="Alternative Tel"
+                label="Alternative Tel"
+                type="Alternative Tel"
+                id="Alternative Tel"
+                autoComplete="new-alternative-tel"
+                onChange={(e) => {
+                  setAlternativeTel(e.target.value);
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                {/* I can pick the data I want bc this label returns a JSON, I can actually choose only the year, or month, or day, whatever I want */}
+                <DatePicker
+                  onChange={(e) => {
+                    setBirthdate({ day: e.$D, month: e.$M, year: e.$y });
+                  }}
+                />
+              </LocalizationProvider>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <FormControl fullWidth>
+                <InputLabel id="Role">Role</InputLabel>
+                <Select
+                  labelId="Role-Label"
+                  id="Role"
+                  label="Role"
+                  onChange={(e) => {
+                    setRole(e.target.value);
+                  }}
+                >
+                  <MenuItem value={"Admin"}>Admin</MenuItem>
+                  <MenuItem value={"Customer"}>Customer</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+          </Grid>
+
+          <Button
+            type="submit"
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+            onClick={newUserHandler}
+          >
+            Sign Up
+          </Button>
+          <Grid container justifyContent="flex-end">
+              <Grid item>
+                <Link href="#" variant="body2" onClick={registerRedirectLogin}>
+                  Already have an account? Sign in
+                </Link>
+              </Grid>
+            </Grid>
+          {/* <input id="email-input" onChange={(e)=>{setEmail(e.target.value)}} ></input>
+                <label htmlFor="email-input"></label>
+                <input id="password-input" type="password" onChange={(e)=>{setPass(e.target.value)}} ></input>
+                <label htmlFor="password-input"></label>
+                <button onClick={newUserHandler} >Registrarse</button> */}
+          {/* </Box> */}
+        </Box>
+      </form>
+      <SnackBarNotification sncBarData={snackBarInfo} />
+    </>
+  );
+};
 
 export default RegisterPage;

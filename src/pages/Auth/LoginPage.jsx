@@ -71,8 +71,12 @@ const LoginPage = () => {
   //     console.log("You just executed something2 function!!")
   //   }
 
-  const loginRedirect = async (e) => {
+  const loginRedirectRegister = async (e) => {
     window.location.assign("/register");
+  };
+
+  const loginRedirectRecovery = async (e) => {
+    window.location.assign("/recovery");
   };
 
   return (
@@ -143,14 +147,14 @@ const LoginPage = () => {
           >
             Sign In
           </Button>
-          <Grid container>
+          <Grid container >
             <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
+              <Link href="#" variant="body2" onClick={loginRedirectRecovery}>
+                {"Forgot password?"}
               </Link>
             </Grid>
             <Grid item>
-              <Link href="#" variant="body2" onClick={loginRedirect}>
+              <Link href="#" variant="body2" onClick={loginRedirectRegister}>
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>

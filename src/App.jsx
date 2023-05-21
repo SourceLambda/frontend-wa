@@ -7,7 +7,7 @@ import { getProfileById } from './util/profileMSQueries'
 
 import { Profile, ProfileAddresses, ProfileCards, ProfilePage, ProfileForm} from './pages/Profile';
 import { BillHistory, CreateBill } from './pages/Bills';
-import { LoginPage, RegisterPage } from './pages/Auth'
+import { LoginPage, RegisterPage, RecoveryPage } from './pages/Auth'
 
 const ProductContext = createContext(null)
 
@@ -41,6 +41,7 @@ function App() {
 					<Route path="/" element={<HomePage/>}></Route>
 					<Route path="/login" element={<LoginPage/>}></Route>
 					<Route path="/register" element={<RegisterPage/>}></Route>
+					<Route path="/recovery" element={<RecoveryPage/>}></Route>
 
 					<Route path="/products" element={<ProductsPage/>}></Route>
 					<Route path="/products/:id" element={<ProductInfoPage/>}></Route>

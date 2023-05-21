@@ -9,6 +9,7 @@ import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+import Link from "@mui/material/Link";
 
 import Checkbox from "@mui/material/Checkbox";
 import Button from "@mui/material/Button";
@@ -85,6 +86,10 @@ const RegisterPage = () => {
   function something2(value) {
     console.log(value);
   }
+
+  const registerRedirectLogin = async (e) => {
+    window.location.assign("/login");
+  };
 
   return (
     <>
@@ -237,6 +242,13 @@ const RegisterPage = () => {
           >
             Sign Up
           </Button>
+          <Grid container justifyContent="flex-end">
+              <Grid item>
+                <Link href="#" variant="body2" onClick={registerRedirectLogin}>
+                  Already have an account? Sign in
+                </Link>
+              </Grid>
+            </Grid>
           {/* <input id="email-input" onChange={(e)=>{setEmail(e.target.value)}} ></input>
                 <label htmlFor="email-input"></label>
                 <input id="password-input" type="password" onChange={(e)=>{setPass(e.target.value)}} ></input>

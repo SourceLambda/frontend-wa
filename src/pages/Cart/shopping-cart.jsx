@@ -1,129 +1,226 @@
-import React, { useState, useEffect } from "react"
-import { getCartInfo, removeItem, deleteCart} from "../../util/CartQueries";
-import GraphQLQuery from "../../util/graphQLQuery"
-import { Typography,Card,CardContent, Button} from "@mui/material";
+import React, { useState, useEffect } from "react";
+import { getCartInfo, removeItem, deleteCart } from "../../util/CartQueries";
+import { createBill, UpdateStateBill } from "../../util/PlaceOrderQueries";
+import GraphQLQuery from "../../util/graphQLQuery";
+import {
+  Typography,
+  Card,
+  CardContent,
+  Button,
+  bottomNavigationActionClasses,
+} from "@mui/material";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import basura from "../../assets/basura.png";
 //import DeleteIcon from '@mui/icons-material/Delete';
-let userId="903aa2d8-cb59-11ed-afa1-0242ac120002"
-let total =0
-
+let userId = "903aa2d8-cb59-11ed-afa1-0242ac120002";
+let name = "aleja";
+let total = 0;
 
 const ShowCart = () => {
-    const [cart, setCart] = useState(null)
-    useEffect(() => {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [cart, setCart] = useState(null);
+  useEffect(() => {
+    const query = getCartInfo(userId);
 
-        const query = getCartInfo(userId);
+    async function getCart() {
+      const response = await GraphQLQuery(query);
 
-         async function getCart () {
-    
-            const response = await GraphQLQuery(query)
+      // apigateway have no response from ms
+      const jsonRes = await response.json();
 
-            // apigateway have no response from ms
-            const jsonRes = await response.json()
-
-            if (jsonRes.data === null || jsonRes.errors) {
-             	return Promise.reject({msg: "Error response from ApiGateway", error: jsonRes.errors[0]});
-            }
-            setCart(jsonRes.data.getCartInfo)
-
-
-        }
-        getCart()
-
-        .then((res) => {   })
-          .catch((err) => {console.log(err)})
-
-    }, [])
-
-
-const deleteItem = async (item) => {
-
-    const query = removeItem(userId, item.itemId );
-    console.log(query)
-    const response =await  GraphQLQuery(query)
-    total=total - item.price*item.quantity
-    
-    const jsonRes =response.json()
-
-  if (jsonRes.errors) {
-       return Promise.reject({msg: "Error response from ApiGateway", error: jsonRes.errors[0]});
+      if (jsonRes.data === null || jsonRes.errors) {
+        return Promise.reject({
+          msg: "Error response from ApiGateway",
+          error: jsonRes.errors[0],
+        });
+      }
+      setCart(jsonRes.data.getCartInfo);
     }
-}
-const deleteAll = async (userId) => {
-    const query = deleteCart(userId);
-    const response =await  GraphQLQuery(query)
-    const jsonRes =response.json()
+    getCart()
+      .then((res) => {})
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  const creationBill = async (userId, name) => {
+    console.log("1", userId);
+    const query = createBill(userId, name);
+    console.log("2", query);
+    const response = await GraphQLQuery(query);
+    console.log("3", response);
+    const jsonRes = await response.json();
+
     if (jsonRes.errors) {
-         return Promise.reject({msg: "Error response from ApiGateway", error: jsonRes.errors[0]});
-        }
-}
-const totalCart = () => {
-    total=0
-    cart?.items.map((item) => (
-        total=total + item.price*item.quantity
-    ))
-    return total
-}
-totalCart()
+      return Promise.reject({
+        msg: "Error response from ApiGateway",
+        error: jsonRes.errors[0],
+      });
+    }
+    console.log("4", jsonRes.data.createBill);
 
+    return jsonRes.data.createBill;
+  };
 
+  const deleteItem = async (item) => {
+    const query = removeItem(userId, item.itemId);
+    console.log(query);
+    const response = await GraphQLQuery(query);
+    total = total - item.price * item.quantity;
 
-    return (
+    const jsonRes = response.json();
+
+    if (jsonRes.errors) {
+      return Promise.reject({
+        msg: "Error response from ApiGateway",
+        error: jsonRes.errors[0],
+      });
+    }
+  };
+  const deleteAll = async (userId) => {
+    const query = deleteCart(userId);
+    const response = await GraphQLQuery(query);
+    const jsonRes = response.json();
+    if (jsonRes.errors) {
+      return Promise.reject({
+        msg: "Error response from ApiGateway",
+        error: jsonRes.errors[0],
+      });
+    }
+  };
+  const updateStateBill = async (idBill) => {
+    const query = UpdateStateBill(idBill);
+    const response = await GraphQLQuery(query);
+    const jsonRes = await response.json();
+    if (jsonRes.errors) {
+      return Promise.reject({
+        msg: "Error response from ApiGateway",
+        error: jsonRes.errors[0],
+      });
+    }
+
+    console.log("update", jsonRes.data.updateStateBill);
+    return jsonRes.data.updateStateBill;
+  };
+
+  const totalCart = () => {
+    total = 0;
+    cart?.items.map((item) => (total = total + item.price * item.quantity));
+    return total;
+  };
+  totalCart();
+
+  return (
+    <div>
+      <Typography variant="h4">Carrito de Compras</Typography>
+      <div>
+        {cart?.items.map((item) => (
+          <Card key={item.itemId}>
+            <CardContent
+              sx={{
+                m: "10px",
+                minWidth: 275,
+                border: "3px solid #E39050",
+                borderRadius: 2,
+                width: 1 / 4,
+                background: "#eeeeee",
+              }}
+            >
+              <Typography variant="subtitle1">Producto: {item.name}</Typography>
+              <Typography variant="subtitle1">Precio: {item.price} </Typography>
+              <Typography variant="subtitle1">
+                Cantidad: {item.quantity}{" "}
+              </Typography>
+              <Button
+                sx={{ m: "20px" }}
+                variant="outlined"
+                onClick={async () => {
+                  console.log(item);
+                  console.log(cart.items);
+                  await deleteItem(item);
+                  //elimina el item de la vista
+                  console.log(cart.items);
+                  let newCart = cart.items.filter(
+                    (i) => i.itemId !== item.itemId
+                  );
+                  console.log(newCart);
+                  setCart({ items: newCart });
+                }}
+              >
+                <img
+                  style={{ display: "flex", borderRadius: "50%" }}
+                  src={basura}
+                  width="30px"
+                ></img>
+                Eliminar
+              </Button>
+            </CardContent>
+          </Card>
+        ))}
+        <br></br>
         <div>
-            <Typography variant="h4">Carrito de Compras</Typography>
-            <div>
-{
-              
+          <Card>
+            <CardContent
+              sx={{
+                minWidth: 400,
+                border: "2px solid #E39050",
+                borderRadius: 4,
+                width: 1 / 4,
+              }}
+            >
+              <Typography>Total: $ {total}</Typography>
+              <Button
+                sx={{ m: "20px" }}
+                variant="contained"
+                color="secondary"
+                onClick={async () => {
+                setLoading(true);
+                  let bill = await creationBill(userId, name);
+                  let idBill = bill.idBill;
+                  let bill1 = await updateStateBill(idBill);
+                  localStorage.setItem("Bill", JSON.stringify(bill1));
+                  console.log(bill1);
+                  navigate("/bill-payment");
+                  await deleteAll(userId);
+                  setCart({ items: [] });
+                setLoading(false);
+                }}
+              >
+                Pagar
+              </Button>
 
-                cart?.items.map((item) => (
-                          
-                    <Card key={item.itemId}>
-
-                    <CardContent sx={{ minWidth: 275 ,border:'1px solid #E39050',width:1/4}} >   
-                   
-                        <Typography>Producto: {item.name}</Typography>
-                        <Typography>Precio: {item.price} </Typography>            
-                        <Typography>Cantidad: {item.quantity} </Typography>
-                    <Button variant="contained"  onClick={     
-                        async () => {
-                            console.log(item)
-                            console.log(cart.items)
-                            await deleteItem(item)
-                            //elimina el item de la vista
-                            console.log(cart.items)
-                            let newCart = cart.items.filter((i) => i.itemId !== item.itemId)
-                            console.log(newCart)
-                            setCart({ items: newCart})
-                        }
-                    }>Eliminar</Button>
-                    </CardContent>
-                    </Card>
-                    ))
-                }
-                <div>
-                 
-                    <Card sx={{ minWidth: 400 ,border:'1px solid #E39050',width:1/4}} >
-                        <CardContent>
-              
-
-                            <Typography>Total: $ { total }</Typography>
-                            <Link  to={'/bill-payment'}><Button variant="contained" >Pagar</Button> </Link>
-                             <Button variant="contained" sx={{margin:'5px ' }}  onClick= {
-                                async () => {
-    
-                                    await deleteAll(userId)
-                                    setCart({ items: []})
-
-                            }
-                         } >Vaciar Carrito</Button>
-                        </CardContent>
-                    </Card>
-                    </div>
-
-            </div>
+              <Button
+                sx={{ m: "20px", margin: "5px " }}
+                variant="outlined"
+                color="secondary"
+                onClick={async () => {
+                  await deleteAll(userId);
+                  setCart({ items: [] });
+                }}
+              >
+                Vaciar Carrito
+              </Button>
+            </CardContent>
+          </Card>
         </div>
-    )
-                        
-                        }
+      </div>
+        {loading && <LoadingPopup />}
+    </div>
+  );
+};
 
-export default ShowCart
+export default ShowCart;
+
+
+const LoadingPopup = () => {
+    return (
+      <div className="loading-popup">
+        <div className="loading-content">
+          <h2>Procesando Pago...</h2>
+          <div className="loader" />
+        </div>
+      </div>
+    );
+  };

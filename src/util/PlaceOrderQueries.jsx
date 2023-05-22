@@ -1,9 +1,7 @@
-
-
 //el id del cliente se debe obtener del local storage
 
-export function getBillsQuery(userId="903aa2d8-cb59-11ed-afa1-0242ac120002") {
-    return `
+export function getBillsQuery(userId = "903aa2d8-cb59-11ed-afa1-0242ac120002") {
+  return `
     query {
         historyByClientId(idCliente:"${userId}") {
             idCliente
@@ -20,10 +18,14 @@ export function getBillsQuery(userId="903aa2d8-cb59-11ed-afa1-0242ac120002") {
     }
     `;
 }
-export function createBill(userId="903aa2d8-cb59-11ed-afa1-0242ac120002") {
-    return `
+export function createBill(
+  userId = "903aa2d8-cb59-11ed-afa1-0242ac120002",
+  name = "Aleja"
+) {
+  return `
     mutation {
-        createBill(idCliente:${userId}){
+        createBill(idCliente:"${userId}", name:"${name}"){
+            idBill
             idCliente
             total
             date
@@ -31,11 +33,48 @@ export function createBill(userId="903aa2d8-cb59-11ed-afa1-0242ac120002") {
             state
             products{
                 name
-                description
                 price
                 quantity
             }
         }
     }
             `;
+}
+
+export function Allbills() {
+  return `
+    query {
+        allBills {
+            total
+            date
+            user
+            state
+            products{
+                name
+                price
+                quantity
+            }
+        }
     }
+            `;
+}
+
+export function UpdateStateBill(idBill) {
+  return `
+    mutation {
+        updateStateBill(idBill: ${idBill}, state: "pago"){
+            idBill
+            idCliente
+            total
+            date
+            user
+            state
+            products{
+                name
+                price
+                quantity
+            }
+        }
+    }
+            `;
+}

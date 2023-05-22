@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react"
 import GraphQLQuery from "../../util/graphQLQuery"
 import { Accordion, AccordionDetails, AccordionSummary, Button, Card, CardContent, Grid, Typography} from "@mui/material";
 import { createBill } from "../../util/PlaceOrderQueries";
+import { Link } from "react-router-dom";
 
 const DEFAULT_BILL = {
     idCliente: "903aa2d8-cb59-11ed-afa1-0242ac120002",
@@ -19,81 +20,86 @@ const DEFAULT_BILL = {
     ]
 }
 
-const CreateBill = (shoppingCart) => {
-    const [bill, setBill] = useState(DEFAULT_BILL) //cambiar por el valor del carrito de compras cuando esté listo
-   
+const ShowBill = () => {
+
+    const [bill, setBill] = useState(DEFAULT_BILL);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+const loadBill = async () => {
+
+    const  prueba= localStorage.getItem("Bill");
+
+    const  bill1=JSON.parse(prueba);
+    console.log(bill1);
+
+    setBill(bill1);
+    setIsLoading(false);
+};
+
+    loadBill();
+    }, []   );
+
+
+
     return (
         <div>
+        <Typography variant="h5" color ='secondary'  m='5px' component="div">
+            Tu factura de compra es:
+                        </Typography>
+
             <Card>
-                <CardContent>
-                    <Typography variant="h5" component="div">
-                        Bill
+                <CardContent  sx={{ margin:'20px' ,minWidth: 400 ,border:'2px solid #E39050',borderRadius:4 ,width:1/2}}>
+
+                  
+                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                        Total : {bill.total}
                     </Typography>
                     <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                        {bill.idCliente}
+                        Fecha: {bill.date}
                     </Typography>
                     <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                        {bill.total}
+                        Usuario: {bill.user}
                     </Typography>
                     <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                        {bill.date}
+                        Estado: {bill.state}
                     </Typography>
-                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                        {bill.user}
-                    </Typography>
-                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                        {bill.state}
-                    </Typography>
-                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                    <Typography sx={{ mb: 1.5 }} color="text.secondary"></Typography>
                         {bill.products.map((product) => (
-                            <Accordion>
+                            <Accordion key={product.name}>
                                 <AccordionSummary
                                     aria-controls="panel1a-content"
                                     id="panel1a-header"
                                 >
-                                    <Typography>{product.name}</Typography>
+                                    <Typography>Producto: {product.name}</Typography>
                                 </AccordionSummary>
                                 <AccordionDetails>
                                     <Grid container spacing={2}>
                                         <Grid item xs={12}>
+
+                                        </Grid>
+                                        <Grid item xs={12}>
                                             <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                                {product.description}
+                                                Precio:{product.price}
                                             </Typography>
                                         </Grid>
                                         <Grid item xs={12}>
                                             <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                                {product.price}
-                                            </Typography>
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                                {product.quantity}
+                                                Cantidad:{product.quantity}
                                             </Typography>
                                         </Grid>
                                     </Grid>
                                 </AccordionDetails>
                             </Accordion>
                         ))}
-                    </Typography>
+                    
                 </CardContent>
             </Card>                        
-        <Button variant="contained" onClick={async () => {
-            let tempBill = JSON.stringify(bill)
-            let finalBill = tempBill.replace(/"([^"]+)":/g, '$1:');
-            const query = createBill(finalBill);
-            console.log(query)
-            const response = await GraphQLQuery(query)
-            const jsonRes = await response.json()
-            if (jsonRes.data === null || jsonRes.errors) {
-                return Promise.reject({msg: "Error response from ApiGateway", error: jsonRes.errors[0]});
-            }
-            console.log(jsonRes.data)
-            setBill(jsonRes.data.createBill)
-        }}>Create Bill</Button>
+        <Link to={'/'}> <Button variant="contained" color='secondary' sx={{ m: '20px' }}>Volver al inicio</Button> </Link>
 
         </div>
 
     )
 }
 
-export default CreateBill
+export default  ShowBill

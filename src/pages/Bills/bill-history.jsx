@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react"
 import { getBillsQuery } from "../../util/PlaceOrderQueries";
 import GraphQLQuery from "../../util/graphQLQuery"
 import { Accordion, AccordionDetails, AccordionSummary, Card, CardContent, Grid, Typography} from "@mui/material";
-
+let userId="903aa2d8-cb59-11ed-afa1-0242ac120002"
 
 const DEFAULT_BILLS =[ {
     idCliente: "loading...",
@@ -25,7 +25,7 @@ const BillHistory = () => {
     const [bills, setBills] = useState(DEFAULT_BILLS)
     useEffect(() => {
 
-        const query = getBillsQuery();
+        const query = getBillsQuery(userId);
 
          async function getBills () {
     
@@ -50,9 +50,9 @@ const BillHistory = () => {
             <div>
                 {
                 bills.map((bill) => (
-                    <Accordion>
+                    <Accordion sx={{ background:'#eeeeee' }}>
                     <AccordionSummary expandIcon="v"
-                    aria-controls="panel1a-content">
+                    aria-controls="panel1a-content"  sx={{ color: '#ec4e20'}}>
                         <Typography>Factura: {bill.date}</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
@@ -61,23 +61,24 @@ const BillHistory = () => {
                             <Typography>Total: {bill.total}</Typography>
                             <Typography>Productos:</Typography>
                             {
-                                bill.products.map((product) => (
-                                   
-                                    <Card>
-                                         
-                                        <CardContent sx={{ minWidth: 275 ,bgcolor:'beige'}} >   
+                                bill.products.map((product) => (                              
+
+                                    <Card key={bill.idBill}>
+                                        <CardContent sx={{ minWidth: 400 ,border:'2px solid #E39050',borderRadius:4 ,width:1/4 ,m:'5px'}}>   
                                         <Typography>Nombre: {product.name}</Typography>
                                         <Typography>Descripción: {product.description}</Typography>
                                         <Typography>Precio: {product.price}</Typography>
                                         <Typography>Cantidad: {product.quantity}</Typography>
                                         </CardContent>
                                     </Card>
-                                 
+                     
                                 ))    
                             }
-                            
+                           
                     </AccordionDetails>
+                    <br></br>
                     </Accordion>
+                   
                 ))
                 }
             

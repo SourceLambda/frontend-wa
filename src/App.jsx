@@ -13,15 +13,11 @@ import { Profile, ProfileAddresses, ProfileCards, ProfilePage, ProfileForm } fro
 import { AddressForm, CardForm } from './components'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 
-const ProductContext = createContext(null)
-
 const theme = createTheme({
 	palette: {
 		primary: {
 			main: '#000000',
 			secondary: '#ec4e20',
-			// light: '#ec4e20',
-			// dark: '#ec4e20',
 			textPrimary: '#95a1ac',
 			textSecondary: '#dbe2e7',
 		},
@@ -41,39 +37,45 @@ const theme = createTheme({
 	// }
 });
 
-function App() {
+const AppContext = createContext(null)
 
+function App() {
+	
 	const [selectedProduct, setSelectedProduct] = useState(null)
 	const [profile, setProfile] = useState({});
-
-    useEffect(() => {
-         const query = getProfileById("fb7e5cf4-5c1c-4598-8265-751613148ce8");
-         const getProfile = async() => {
-             const res = await GraphQLQuery(query);
-             const jsonRes = await res.json();
-
-	 		if (jsonRes.data === null || jsonRes.errors) {
-	 		 	return Promise.reject({msg: "Error response from ApiGateway", error: jsonRes?.errors[0]});
-	 		}
-            
-             setProfile(jsonRes.data.profileById);
-
-         }
-         getProfile();
-        
-     }, []);
+	
+	useEffect(() => {// actualizar con el localStorage guardando el idProfile uuid
+		const getProfile = async() => {
+			const query = getProfileById(localStorage.getItem('user-id'));
+			
+			const res = await GraphQLQuery(query);
+			const jsonRes = await res.json();
+			
+			if (jsonRes.data === null || jsonRes.errors) {
+				return Promise.reject({msg: "Error response from ApiGateway", error: jsonRes?.errors[0]});
+			}
+			
+			setProfile(jsonRes.data.profileById);
+		}
+		localStorage.getItem('user-id') && getProfile();
+		
+	}, []);
 	
 	return (
-		<ProductContext.Provider value={{selectedProduct, setSelectedProduct}}>
-			<ThemeProvider theme={theme}>
+		<AppContext.Provider value={{
+			selectedProduct, 
+			setSelectedProduct, 
+			profile
+		}}>
+		<ThemeProvider theme={theme}>
 			<Router>
-				<Header profile={profile}/>
+				<Header />
 				<Routes>
 					<Route path="/" element={<HomePage/>}></Route>
 					<Route path="/login" element={<LoginPage/>}></Route>
 					<Route path="/register" element={<RegisterPage/>}></Route>
 					<Route path="/recovery" element={<RecoveryPage/>}></Route>
-
+					
 					<Route path="/products" element={<ProductsPage/>}></Route>
 					<Route path="/products/:id" element={<ProductInfoPage/>}></Route>
 					<Route path="/new-product" element={<ProductFormPage dataType={'create'}/>}></Route>
@@ -96,18 +98,9 @@ function App() {
 				</Routes>
 				<Footer />
 			</Router>
-			</ThemeProvider>
-		</ProductContext.Provider>
-/* 		<ProfileContext.Provider value={{Profile, setProfile}}>
-			<Router>
-				<Header />
-				<Routes>
-					<Route path="/" element={<HomePage/>}></Route>
-					<Route path='/profile' element={<Profile />}/>
-				</Routes>
-			</Router>
-		</ProfileContext.Provider> */
-	)
-}
-
-export { ProductContext, App }
+		</ThemeProvider>
+		</AppContext.Provider>
+		)
+	}
+	
+	export { AppContext, App }

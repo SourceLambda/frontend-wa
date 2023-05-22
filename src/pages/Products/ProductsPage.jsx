@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { getCategoriesQuery, getCountProducts, getProductsQuery } from "../../util/postMSQueries";
 import { Link, useSearchParams } from "react-router-dom";
 import GraphQLQuery from "../../util/graphQLQuery";
-import { ProductContext } from "../../App";
+import { AppContext } from "../../App";
 import { Link as StyleLink, Card, CardContent, CardMedia, Container, Grid, Typography, Pagination, List, ListItemButton, ListItemText, ListSubheader, InputBase } from "@mui/material";
 import { createCategoryTree } from "../../util/CategoryTreeClass";
 import { SearchComp } from "../../components";
@@ -14,7 +14,7 @@ const ProductsPage = () => {
     const [searchParams] = useSearchParams()
     const [categoryTree, setCategoryTree] = useState(null)
 
-    const { setSelectedProduct } = useContext(ProductContext)
+    const { setSelectedProduct } = useContext(AppContext)
     
     useEffect(() => {
 

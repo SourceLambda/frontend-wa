@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react"
 import { Link, useNavigate, useParams } from "react-router-dom"
-import { ProductContext } from "../../App"
+import { AppContext } from "../../App"
 import { AddCartModal, Review, ReviewForm, SnackBarNotification } from "../../components"
 import Modal from '@mui/material/Modal';
 import GraphQLQuery from "../../util/graphQLQuery"
@@ -9,15 +9,13 @@ import { Box, Button, Card, CardContent, CardMedia, Grid, Typography } from "@mu
 import { deleteFile, imageNameReference } from "../../util/firebase";
 
 const DEFAULT_REVIEW = {
-    User_name: localStorage.getItem('user-email')?.split('@')[0], // cambiar cuando se tenga la info del perfil
-    User_email: localStorage.getItem('user-email'), 
     Rating: 1,
     Review_text: ""
 }
 
 const ProductInfoPage = () => {
 
-    const { selectedProduct, setSelectedProduct } = useContext(ProductContext)
+    const { selectedProduct, setSelectedProduct, profile } = useContext(AppContext)
     const { id } = useParams('id')
     const [reviews, setReviews] = useState([])
     const [modalOpen, setModalOpen] = useState(false);
@@ -156,7 +154,7 @@ const ProductInfoPage = () => {
                         <Typography variant="subtitle1">
                             Rating: {(selectedProduct.Sum_ratings / selectedProduct.Num_ratings) || selectedProduct.Num_ratings}
                         </Typography>
-                        {localStorage.getItem('user-role') === 'admin' ? 
+                        {profile?.role === 'Admin' ? 
                         (<Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-around', flexDirection: 'row' }} >
                             <Link to={"/edit-product"} style={{ textDecoration:'none' }}>
                                 <Button variant="outlined" color='primary' >Editar Producto</Button>
@@ -171,7 +169,7 @@ const ProductInfoPage = () => {
                         alt={selectedProduct.Title + " Image"}
                     />
                 </Card>
-                {localStorage.getItem('user-role') === 'customer' ? 
+                {profile?.role === 'Customer' ? 
                     (<Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-around', flexDirection: 'row' }} >
                         <Button sx={{m: '20px'}} variant="contained" color='secondary' onClick={() => {setModalOpen(true)}}>Crear Reseña</Button>
                         <Button sx={{m: '20px'}} variant="contained" color='secondary' onClick={() => {setAddCartModalOpen(true)}}>Añadir al Carrito</Button>
@@ -187,7 +185,11 @@ const ProductInfoPage = () => {
                 <Modal
                     open={modalOpen}
                     onClose={() => {setModalOpen(false)}}
-                    children={<div><ReviewForm reviewData={DEFAULT_REVIEW} postID={id} dataType={'create'} /></div>}
+                    children={<div><ReviewForm reviewData={{
+                        ...DEFAULT_REVIEW, 
+                        User_name: `${profile.firstname} ${profile.lastname}`, 
+                        User_email: profile.email,
+                    }} postID={id} dataType={'create'} /></div>}
                 ></Modal>
                 <Modal
                     open={addCartModalOpen}

@@ -1,6 +1,9 @@
 import { AppBar, CssBaseline, GlobalStyles, Toolbar, Typography, Link as StyleLink, Box } from '@mui/material'
 import { Link } from 'react-router-dom'
 import SourceLambdaLogo from '../../assets/sl_logo.png'
+import { useContext } from 'react';
+import { AppContext } from '../../App';
+
 import './App.css';
 
 const toolBarStyle = {
@@ -65,7 +68,9 @@ const DefaultUserLinks = () => {
 	)
 }
 
-const Header = ({profile}) => {
+const Header = () => {
+
+	const { profile } = useContext(AppContext)
 
     return (
         <>
@@ -81,8 +86,8 @@ const Header = ({profile}) => {
 						<StyleLink component={Link} to="/products" variant="button" color='secondary' sx={buttonStyle}>
 							Productos
 						</StyleLink>
-						{(localStorage.getItem('user-role') === 'admin' && <AdminLinks username={profile.firstname} />) 
-							|| (localStorage.getItem('user-role') === 'customer' && <ClientLinks username={profile.firstname} />) 
+						{(profile?.role === 'Admin' && <AdminLinks username={profile?.firstname} />) 
+							|| (profile?.role === 'Customer' && <ClientLinks username={profile?.firstname} />) 
 							|| <DefaultUserLinks />}
 					</nav>
 				</Toolbar>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { ProductForm } from "../../components"
-import { ProductContext } from '../../App';
+import { AppContext } from '../../App';
 import { getCategoriesQuery } from '../../util/postMSQueries'
 import GraphQLQuery from '../../util/graphQLQuery'
 
@@ -19,7 +19,7 @@ const DEFAULT_POST = {
 
 function ProductFormPage({ dataType }) {
 
-	const { selectedProduct } = useContext(ProductContext)
+	const { selectedProduct } = useContext(AppContext)
 	const [categories, setCategories] = useState([])
 
 	useEffect(() => {

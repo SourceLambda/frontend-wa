@@ -4,7 +4,7 @@ import { imageReference, uploadFile, deleteFile, imageNameReference } from "../u
 import GraphQLQuery from "../util/graphQLQuery"
 import { productMutation } from "../util/postMSQueries"
 import { createCategoryTree } from "../util/CategoryTreeClass"
-import { json, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import SnackBarNotification from "./SnackBarNotification"
 import { indexProductQuery } from "../util/browserQueries"
 
@@ -159,19 +159,20 @@ function ProductForm({ data, fetchedCategories }) {
 			 	return Promise.reject({msg: "Error from ApiGateway", error: jsonResNewProduct.errors[0]});
 			}
 
-			const indexProdQuery = indexProductQuery({
-				ID: data.post.ID || jsonResNewProduct.data.createPost,
-				Title: titleInput.current.value,
-				Description: descTextInput.current.value,
-				Category: categoryTree.getCategoryByID(category).Name,
-			})
-			const indexProdResponse = await GraphQLQuery(indexProdQuery);
-			const jsonResIndexProd = await indexProdResponse.json();
+			// here the product go to rabbitmq and is indexed
+			// const indexProdQuery = indexProductQuery({
+			// 	ID: data.post.ID || jsonResNewProduct.data.createPost,
+			// 	Title: titleInput.current.value,
+			// 	Description: descTextInput.current.value,
+			// 	Category: categoryTree.getCategoryByID(category).Name,
+			// })
+			// const indexProdResponse = await GraphQLQuery(indexProdQuery);
+			// const jsonResIndexProd = await indexProdResponse.json();
 
-			// apigateway have no response from ms in indexProduct query
-			if (jsonResIndexProd.data === null || jsonResIndexProd.errors) {
-			 	return Promise.reject({msg: "Error from ApiGateway", error: jsonResIndexProd.errors[0]});
-			}
+			// // apigateway have no response from ms in indexProduct query
+			// if (jsonResIndexProd.data === null || jsonResIndexProd.errors) {
+			//  	return Promise.reject({msg: "Error from ApiGateway", error: jsonResIndexProd.errors[0]});
+			// }
 
 			setSnackBarInfo({
 				message: data.dataType === 'create' ? 'Producto creado exitosamente' : 'Producto actualizado exitosamente', 

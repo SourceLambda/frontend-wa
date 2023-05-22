@@ -1,12 +1,15 @@
 import { Box, Button, Card, CardContent, Modal, Typography } from "@mui/material"
-import { useState } from "react"
+import { useContext, useState } from "react"
 import ReviewForm from "./ReviewForm"
 import { deleteReviewMutation } from "../util/postMSQueries"
 import GraphQLQuery from "../util/graphQLQuery"
 import SnackBarNotification from "./SnackBarNotification"
+import { AppContext } from "../App"
 
 const Review = ({ review, postID }) => {
 
+    const { profile } = useContext(AppContext)
+    
     const [modalOpen, setModalOpen] = useState(false)
     const [snackBarInfo, setSnackBarInfo] = useState({
 		message: "", 
@@ -42,7 +45,6 @@ const Review = ({ review, postID }) => {
 				time: 3000,
 				redirectHandler: () => window.location.reload()
 			})
-			//console.log(jsonRes.data)
 		}
 		catch (err) {
 			await deleteFile(imageFirebaseRef)
@@ -53,7 +55,6 @@ const Review = ({ review, postID }) => {
 				time: 3000,
 				redirectHandler: () => {}
 			})
-			//console.log(err)
         }
     }
     
@@ -70,10 +71,10 @@ const Review = ({ review, postID }) => {
                 <Typography>Puntuación: {"*".repeat(review.Rating)}</Typography>
                 <Typography paragraph >{review.Review_text}</Typography>
 
-                {localStorage.getItem('user-role') === 'admin' ? 
+                {profile?.role === 'Admin' ? 
                 (<Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-around', flexDirection: 'row' }} >
                     <Button variant="outlined" onClick={() => {setModalOpen(true)}}>Editar</Button>
-                    <Button variant="outlined" color="error" onClick={handleDeleteReview}>Borrar</Button>
+                    <Button variant="outlined" color="secondary" onClick={handleDeleteReview}>Borrar</Button>
                 </Box>) : null}
             </CardContent>
 

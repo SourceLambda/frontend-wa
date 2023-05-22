@@ -65,11 +65,9 @@ const LoginPage = () => {
         });
       }
 
-
-
-      // json.data.loginUser = {token: "...", user: {id, email, role}}
-      localStorage.setItem("user-role", json.data.loginUser.user.role);
-      localStorage.setItem("user-email", json.data.loginUser.user.email);
+      localStorage.setItem("user-id", jsonProfile.data.loginToProfile.idProfile);
+      // localStorage.setItem("user-role", json.data.loginUser.user.role);
+      // localStorage.setItem("user-email", json.data.loginUser.user.email);
 
       setSnackBarInfo({
         message: "Inicio de sesión exitoso.",

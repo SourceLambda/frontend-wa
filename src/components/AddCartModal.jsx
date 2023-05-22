@@ -37,7 +37,7 @@ const AddCartModal = ({ productTitle, productID }) => {
         if (invalidQuantity) return
     
         try {
-            const userId = "903aa2d8-cb59-11ed-afa1-0242ac120002"; // CAMBIAR CUANDO SE TENGA EL USER UUID
+            const userId = localStorage.getItem('user-id');
 
             const query = addItem(userId, {ID: productID, quantity: quantityInput.current.value})
             const response = await GraphQLQuery(query)

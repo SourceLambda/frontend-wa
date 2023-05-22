@@ -87,11 +87,11 @@ function App() {
 					
 					<Route path='/profile' element={<Profile profile={profile}/>}/>
 					<Route path='/profile/profilepage' element={<ProfilePage profile={profile}/>}/>
-					<Route path='/profile/profilepage/edit' element={<ProfileForm profile={profile}/>}/>
-					<Route path='/profile/addresses' element={<ProfileAddresses profile={profile}/>}/>
+					<Route path='/profile/profilepage/edit' element={<ProfileForm profile={profile}/>}/> {/* este no */}
+					<Route path='/profile/addresses' element={<ProfileAddresses profile={profile}/>}/> {/* pasar id en vez de objeto */}
 					<Route path='/profile/addresses/new' element={<AddressForm idProfile={profile.idProfile} />} />
 					<Route path='/profile/addresses/edit-address/:id' element={<AddressForm idProfile={profile.idProfile} />}/>
-					<Route path='/profile/cards' element={<ProfileCards profile={profile}/>}/>
+					<Route path='/profile/cards' element={<ProfileCards profile={profile}/>}/> {/* pasar id en vez de objeto */}
 					<Route path='/profile/cards/new' element={<CardForm idProfile={profile.idProfile}/>}/>
 					
 					<Route path="/*" element={<div><h2>Error 404</h2><img src={errorImage} width='300px'></img><p>Not found</p></div>}></Route>

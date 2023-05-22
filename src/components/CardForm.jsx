@@ -1,4 +1,4 @@
-import { Box, Button, Container, Modal, Paper, TextField, Typography } from "@mui/material";
+import { Box, Button, Container, Modal, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import { createCardToProfile } from "../util/profileMSQueries";
 import GraphQLQuery from "../util/graphQLQuery";

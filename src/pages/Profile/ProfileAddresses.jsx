@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { deleteAddress, getAddressesByProfile } from "../../util/profileMSQueries";
 import GraphQLQuery from "../../util/graphQLQuery";
-import { Link, Route } from "react-router-dom";
-import { Avatar, Box, Button, ButtonBase, ButtonGroup, Card, CardHeader, Container, IconButton, Menu, MenuItem, Modal, Typography } from "@mui/material";
+import { Link } from "react-router-dom";
+import { Avatar, Box, Button, Card, CardHeader, Container, IconButton, Menu, MenuItem, Modal, Typography } from "@mui/material";
 
 const ProfileAddresses = ({profile}) => {
     const [addresses, setAddresses] = useState([]);

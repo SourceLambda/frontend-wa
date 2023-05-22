@@ -1,4 +1,4 @@
-import { Box, Button, Card, CardContent, Container, Modal, TextField, Typography } from "@mui/material";
+import { Box, Button, Container, Modal, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { updateProfile } from "../../util/profileMSQueries";

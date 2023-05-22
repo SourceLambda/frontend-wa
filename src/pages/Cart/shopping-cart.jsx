@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { getCartInfo, removeItem, deleteCart } from "../../util/CartQueries";
 import { createBill, UpdateStateBill } from "../../util/PlaceOrderQueries";
 import GraphQLQuery from "../../util/graphQLQuery";
@@ -7,20 +7,23 @@ import {
   Card,
   CardContent,
   Button,
-  bottomNavigationActionClasses,
 } from "@mui/material";
-import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import basura from "../../assets/basura.png";
+import { AppContext } from "../../App";
 //import DeleteIcon from '@mui/icons-material/Delete';
-let userId = "903aa2d8-cb59-11ed-afa1-0242ac120002";
-let name = "aleja";
+
+let userId = localStorage.getItem('user-id');
 let total = 0;
 
 const ShowCart = () => {
-  const navigate = useNavigate();
+
   const [loading, setLoading] = useState(false);
   const [cart, setCart] = useState(null);
+  const { profile } = useContext(AppContext)
+  
+  const navigate = useNavigate();
+  
   useEffect(() => {
     const query = getCartInfo(userId);
 
@@ -177,7 +180,7 @@ const ShowCart = () => {
                 color="secondary"
                 onClick={async () => {
                 setLoading(true);
-                  let bill = await creationBill(userId, name);
+                  let bill = await creationBill(userId, `${profile.firstname} ${profile.lastname}`);
                   let idBill = bill.idBill;
                   let bill1 = await updateStateBill(idBill);
                   localStorage.setItem("Bill", JSON.stringify(bill1));

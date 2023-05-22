@@ -1,8 +1,5 @@
-import { useContext, useEffect, useState } from "react";
-import { getProfileById } from "../../util/profileMSQueries";
-import {  Link, json } from "react-router-dom";
-import GraphQLQuery from "../../util/graphQLQuery";
-import { Button, Card, CardActions, CardContent, Container, Typography} from "@mui/material";
+import { Link } from "react-router-dom";
+import { Card, CardActions, CardContent, Container, Typography} from "@mui/material";
 
 const Profile = ({profile}) => {
 

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react"
 import { getBillsQuery } from "../../util/PlaceOrderQueries";
 import GraphQLQuery from "../../util/graphQLQuery"
 import { Accordion, AccordionDetails, AccordionSummary, Card, CardContent, Grid, Typography} from "@mui/material";
-let userId="903aa2d8-cb59-11ed-afa1-0242ac120002"
 
 const DEFAULT_BILLS =[ {
     idCliente: "loading...",
@@ -20,6 +19,8 @@ const DEFAULT_BILLS =[ {
     ]
 }
 ]
+
+let userId = localStorage.getItem('user-id')
 
 const BillHistory = () => {
     const [bills, setBills] = useState(DEFAULT_BILLS)

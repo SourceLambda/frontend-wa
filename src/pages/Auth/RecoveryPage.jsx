@@ -19,12 +19,15 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
+
 // refactor this component in UserForm and import it here
 const RecoveryPage = () => {
-
+  const [email, setEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [repeatedPassword, setRepeatedPassword] = useState("");
- 
+  const [isEqual,setIsEqual] = useState(false);
 
   const [snackBarInfo, setSnackBarInfo] = useState({
     message: "",
@@ -38,18 +41,22 @@ const RecoveryPage = () => {
     e.preventDefault();
 
     try {
-        if (newPassword !== repeatedPassword){
-            console.log("The password is not the same");
-        }
-
+      //Firewall
+      if (newPassword !== repeatedPassword) {
+        console.log("The password is not the same");
+        setIsEqual(true);
         return;
+        
+      }else{
+        setIsEqual(false);
+      }
 
       const userData = {
+        email,
         newPassword,
-        repeatedPassword
       };
 
-      const query = createUserQuery(userData);
+      const query = recoverUserQuery(userData);
 
       const response = await GraphQLQuery(query);
       const json = await response.json();
@@ -63,7 +70,7 @@ const RecoveryPage = () => {
       }
 
       setSnackBarInfo({
-        message: "Usuario registrado correctamente.",
+        message: "Recovery was a success!",
         type: "success",
         time: 1000,
         state: true,
@@ -116,6 +123,32 @@ const RecoveryPage = () => {
           {/* <Box component="form" Validate sx={{ mt: 3 }}> */}
           <Grid container spacing={2}>
             <Grid item xs={12}>
+              {
+                
+                (isEqual) && 
+                <Alert severity="error">
+                  <AlertTitle>Error</AlertTitle>
+                  This is an error alert — <strong>check it out!</strong>
+                </Alert>
+              }
+            </Grid>
+
+            <Grid item xs={12}>
+              <TextField
+                margin="normal"
+                required
+                id="email"
+                fullWidth
+                label="Email Address"
+                name="email"
+                autoComplete="email"
+                autoFocus
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
+              />
+            </Grid>
+            <Grid item xs={12}>
               <TextField
                 required
                 fullWidth
@@ -125,7 +158,7 @@ const RecoveryPage = () => {
                 id="password"
                 autoComplete="new-password"
                 onChange={(e) => {
-                    setNewPassword(e.target.value);
+                  setNewPassword(e.target.value);
                 }}
               />
             </Grid>
@@ -139,7 +172,7 @@ const RecoveryPage = () => {
                 id="password"
                 autoComplete="new-repeated-password"
                 onChange={(e) => {
-                    setRepeatedPassword(e.target.value);
+                  setRepeatedPassword(e.target.value);
                 }}
               />
             </Grid>

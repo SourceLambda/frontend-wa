@@ -22,3 +22,15 @@ export function loginUserQuery (userData) {
     
     return query;
 }
+
+export function recoverUserQuery (userData) {
+    const query = `
+    mutation {
+        recoverUser(userRecover: {
+            email: "${userData.email}"
+            password: "${userData.newPassword}"
+        })
+    }`;
+    
+    return query;
+}

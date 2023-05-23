@@ -7,12 +7,12 @@ import { v4 } from 'uuid'
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-	apiKey: import.meta.env.VITE_API_KEY,
-	authDomain: import.meta.env.VITE_AUTH_DOMAIN,
-	projectId: import.meta.env.VITE_PROJECT_ID,
-	storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
-	messagingSenderId: import.meta.env.VITE_MSGING_SENDER_ID,
-	appId: import.meta.env.VITE_APP_ID
+	apiKey: import.meta.env.VITE_API_KEY || "AIzaSyCiaOOXpNXb2tKwNB8KvQSwHblIcIiR3GY",
+	authDomain: import.meta.env.VITE_AUTH_DOMAIN || "sourcelambda-post-st-e89b8.firebaseapp.com",
+	projectId: import.meta.env.VITE_PROJECT_ID || "sourcelambda-post-st-e89b8",
+	storageBucket: import.meta.env.VITE_STORAGE_BUCKET || "sourcelambda-post-st-e89b8.appspot.com",
+	messagingSenderId: import.meta.env.VITE_MSGING_SENDER_ID || "426549858423",
+	appId: import.meta.env.VITE_APP_ID || "1:426549858423:web:23ff5bc10d84ff4b6b7672"
 };
 
 // Initialize Firebase

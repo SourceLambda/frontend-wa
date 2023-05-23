@@ -160,19 +160,19 @@ function ProductForm({ data, fetchedCategories }) {
 			}
 
 			// here the product go to rabbitmq and is indexed
-			// const indexProdQuery = indexProductQuery({
-			// 	ID: data.post.ID || jsonResNewProduct.data.createPost,
-			// 	Title: titleInput.current.value,
-			// 	Description: descTextInput.current.value,
-			// 	Category: categoryTree.getCategoryByID(category).Name,
-			// })
-			// const indexProdResponse = await GraphQLQuery(indexProdQuery);
-			// const jsonResIndexProd = await indexProdResponse.json();
+			const indexProdQuery = indexProductQuery({
+				ID: data.post.ID || jsonResNewProduct.data.createPost,
+				Title: titleInput.current.value,
+				Description: descTextInput.current.value,
+				Category: categoryTree.getCategoryByID(category).Name,
+			})
+			const indexProdResponse = await GraphQLQuery(indexProdQuery);
+			const jsonResIndexProd = await indexProdResponse.json();
 
-			// // apigateway have no response from ms in indexProduct query
-			// if (jsonResIndexProd.data === null || jsonResIndexProd.errors) {
-			//  	return Promise.reject({msg: "Error from ApiGateway", error: jsonResIndexProd.errors[0]});
-			// }
+			// apigateway have no response from ms in indexProduct query
+			if (jsonResIndexProd.data === null || jsonResIndexProd.errors) {
+			 	return Promise.reject({msg: "Error from ApiGateway", error: jsonResIndexProd.errors[0]});
+			}
 
 			setSnackBarInfo({
 				message: data.dataType === 'create' ? 'Producto creado exitosamente' : 'Producto actualizado exitosamente', 

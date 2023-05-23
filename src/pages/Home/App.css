@@ -2,3 +2,42 @@
     background-color: #414549;
     transition: 0.3s;
 }
+
+.container {
+    max-width: 1180px;
+    margin-inline: auto;
+    padding-inline: 3vw;
+}
+
+.flex {
+    display: flex;
+    align-items: center;
+}
+
+.header-section {
+    justify-content: center;
+    gap: 50px;
+}
+
+.header-left {
+    margin-right: 50px;
+    max-width: 40vw;
+}
+
+.header-left h1 {
+    margin-top: 20px;
+}
+
+.header-right img {
+    width: 300px;
+    border-radius: 50%;
+}
+
+.github-image img {
+    width: 200px;
+    border-radius: 50%;
+}
+
+.second-div {
+    margin-top: 50px;
+}

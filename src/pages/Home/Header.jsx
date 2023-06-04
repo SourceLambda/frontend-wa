@@ -1,10 +1,11 @@
-import { AppBar, CssBaseline, GlobalStyles, Toolbar, Typography, Link as StyleLink, Box } from '@mui/material'
+import { AppBar, CssBaseline, GlobalStyles, Toolbar, Typography, Link as StyleLink } from '@mui/material'
 import { Link } from 'react-router-dom'
 import SourceLambdaLogo from '../../assets/sl_logo.png'
 import { useContext } from 'react';
 import { AppContext } from '../../App';
 
 import './App.css';
+import FootballBanner from './FootballBanner';
 
 const toolBarStyle = {
     backgroundColor: '#1a1f24', // si se quiere dejar el header negro, comentar esta linea
@@ -80,7 +81,7 @@ const Header = () => {
 				<Toolbar sx={toolBarStyle}>
 					<StyleLink sx={{ alignContent: 'center', display: 'flex' }} component={Link} to='/' variant="button">
 						<img style={{ display: 'flex', borderRadius: '50%' }} src={SourceLambdaLogo} width='50px'></img>
-						<Typography variant="h6" color='white' sx={{ ml: 2, display: 'flex', alignItems: 'center' }} ><i>SourceLambda</i></Typography>
+						<Typography variant="h6" color='white' fontSize={25} sx={{ ml: 2, display: 'flex', alignItems: 'center', textTransform: 'none' }} ><i>SourceLambda</i></Typography>
 					</StyleLink>
 					<nav>
 						<StyleLink component={Link} to="/products" variant="button" color='secondary' sx={buttonStyle}>
@@ -91,6 +92,7 @@ const Header = () => {
 							|| <DefaultUserLinks />}
 					</nav>
 				</Toolbar>
+				<FootballBanner />				
 			</AppBar>
         </>
     )

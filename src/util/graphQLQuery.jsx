@@ -1,5 +1,5 @@
-const HOST = import.meta.env.VITE_AG_HOST || 'localhost';
-const PORT = import.meta.env.VITE_AG_PORT || '5000';
+const HOST = import.meta.env.VITE_AG_HOST;
+const PORT = import.meta.env.VITE_AG_PORT;
 
 const graphQLAddress = `http://${HOST}:${PORT}/graphql`;
 

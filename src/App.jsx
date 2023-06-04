@@ -23,6 +23,9 @@ const theme = createTheme({
 		},
 		secondary: {
 			main: '#ec4e20',
+		},
+		whiteColor: {
+			main: '#ffffff'
 		}
 	},
 	// aqui se especifica la fuente, se convierte a array la prop de css:
